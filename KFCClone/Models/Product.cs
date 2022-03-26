@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KFCClone.Models
 {
@@ -16,11 +18,12 @@ namespace KFCClone.Models
         public string ProductDescription { get; set; } = null!;
         public string ProductImage { get; set; } = null!;
         public int ProductPrice { get; set; }
-        public int CatergoryId { get; set; }
         public int? DrinkCount { get; set; }
         public bool IsMeal { get; set; }
 
-        public virtual Category Catergory { get; set; } = null!;
+        [ForeignKey(nameof(Models.Category))]
+        public int CategoryId { get; set; }
+        public virtual Category Category { get; set; } = null!;
         public virtual ICollection<OrderProduct> OrderProducts { get; set; }
         public virtual ICollection<ProductAddOn> ProductAddOns { get; set; }
     }
