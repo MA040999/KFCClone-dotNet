@@ -18,12 +18,12 @@ namespace KFCClone.Models
         public int ProductQuantity { get; set; }
 
         [Required(ErrorMessage = "Order ID is required")]
-        [ForeignKey(nameof(Models.Order))]
+        [ForeignKey(nameof(Order))]
         public int OrderId { get; set; }
         public virtual Order Order { get; set; } = null!;
 
         [Required(ErrorMessage = "Product ID is required")]
-        [ForeignKey(nameof(Models.Product))]
+        [ForeignKey(nameof(Product))]
         public int ProductId { get; set; }
         public virtual Product Product { get; set; } = null!;
         public virtual ICollection<OrderProductAddOn> OrderProductAddOns { get; set; }

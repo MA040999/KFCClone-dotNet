@@ -8,10 +8,10 @@ namespace KFCClone.Models
     {
         public int Id { get; set; }
 
-        [ForeignKey(nameof(Models.Product))]
+        [ForeignKey(nameof(Product))]
         public int ProductId { get; set; }
 
-        [ForeignKey(nameof(Models.AddOn))]
+        [ForeignKey(nameof(AddOn))]
         public int AddOnId { get; set; }
 
         public virtual AddOn AddOn { get; set; } = null!;

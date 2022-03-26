@@ -18,7 +18,7 @@ namespace KFCClone.Models
         public int OrderTotal { get; set; }
 
         [Required(ErrorMessage = "User ID is required")]
-        [ForeignKey(nameof(Models.User))]
+        [ForeignKey(nameof(User))]
         public int UserId { get; set; }
         public virtual User User { get; set; } = null!;
         public virtual ICollection<OrderProduct> OrderProducts { get; set; }

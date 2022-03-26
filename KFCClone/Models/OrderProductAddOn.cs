@@ -10,11 +10,11 @@ namespace KFCClone.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Order Product ID is required")]
-        [ForeignKey(nameof(Models.OrderProduct))]
+        [ForeignKey(nameof(OrderProduct))]
         public int OrderProductId { get; set; }
 
         [Required(ErrorMessage = "AddOn ID is required")]
-        [ForeignKey(nameof(Models.AddOn))]
+        [ForeignKey(nameof(AddOn))]
         public int AddOnId { get; set; }
 
         [Required(ErrorMessage = "AddOn Quantity is required")]

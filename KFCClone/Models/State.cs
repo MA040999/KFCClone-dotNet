@@ -14,7 +14,7 @@ namespace KFCClone.Models
         public int Id { get; set; }
         public string StateName { get; set; } = null!;
 
-        [ForeignKey(nameof(Models.Country))]
+        [ForeignKey(nameof(Country))]
         public int CountryId { get; set; }
 
         public virtual Country Country { get; set; } = null!;

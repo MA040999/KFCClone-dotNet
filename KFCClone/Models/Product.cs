@@ -21,7 +21,7 @@ namespace KFCClone.Models
         public int? DrinkCount { get; set; }
         public bool IsMeal { get; set; }
 
-        [ForeignKey(nameof(Models.Category))]
+        [ForeignKey(nameof(Category))]
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; } = null!;
         public virtual ICollection<OrderProduct> OrderProducts { get; set; }

@@ -9,7 +9,7 @@ namespace KFCClone.Models
         public int Id { get; set; }
         public string CityName { get; set; } = null!;
 
-        [ForeignKey(nameof(Models.State))]
+        [ForeignKey(nameof(State))]
         public int StateId { get; set; }
 
         public virtual State State { get; set; } = null!;
