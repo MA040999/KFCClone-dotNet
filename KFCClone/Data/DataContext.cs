@@ -1,8 +1,11 @@
 ﻿
 using KFCClone.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace KFCClone.Data
 {
+    //public partial class DataContext : IdentityDbContext<User, IdentityRole<int>, int>
     public partial class DataContext : DbContext
     {
         public DataContext()

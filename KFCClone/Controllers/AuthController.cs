@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using KFCClone.DTOs.Auth;
+using KFCClone.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KFCClone.Controllers
@@ -7,23 +9,18 @@ namespace KFCClone.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private DbContext _context;
-        public AuthController(DbContext context)
+        private readonly IAuthRepository _auth;
+        public AuthController(IAuthRepository authRepository)
         {
-            _context = context;
+            _auth = authRepository;
         }
 
-        [HttpPost("register")]
-        public IActionResult Register(string username, string password)
-        {
-            if (username == "admin" && password == "admin")
-            {
-                return Ok(new { token = "admin" });
-            }
-            else
-            {
-                return Unauthorized();
-            }
-        }
+        //[HttpPost("register")]
+        //public async Task<IActionResult> Register([FromBody] RegisterRequestBodyDto requestBodyDto)
+        //{
+        //    if (requestBodyDto == null) return BadRequest();
+
+        //    return Ok(await _auth.RegisterAsync(requestBodyDto));
+        //}
     }
 }
