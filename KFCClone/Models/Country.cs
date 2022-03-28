@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KFCClone.Models
 {
@@ -14,5 +15,8 @@ namespace KFCClone.Models
         public string CountryName { get; set; } = null!;
 
         public virtual ICollection<State> States { get; set; }
+
+        [ForeignKey("CountryId")]
+        public virtual ICollection<User> Users { get; set; } = null!;
     }
 }

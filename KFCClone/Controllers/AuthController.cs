@@ -15,12 +15,12 @@ namespace KFCClone.Controllers
             _auth = authRepository;
         }
 
-        //[HttpPost("register")]
-        //public async Task<IActionResult> Register([FromBody] RegisterRequestBodyDto requestBodyDto)
-        //{
-        //    if (requestBodyDto == null) return BadRequest();
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequestBodyDto requestBodyDto)
+        {
+            if (requestBodyDto == null) return BadRequest();
 
-        //    return Ok(await _auth.RegisterAsync(requestBodyDto));
-        //}
+            return Ok(await _auth.RegisterAsync(requestBodyDto));
+        }
     }
 }

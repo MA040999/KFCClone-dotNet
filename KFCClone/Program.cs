@@ -3,6 +3,7 @@ global using KFCClone.Data;
 using KFCClone;
 using KFCClone.Data.Repositories;
 using Microsoft.AspNetCore.Identity;
+using KFCClone.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddTransient<ErrorHandlingMiddleware>(); 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -31,6 +33,8 @@ app.UseHttpsRedirection();
 
 //app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.MapControllers();
 

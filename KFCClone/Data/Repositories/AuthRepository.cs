@@ -14,14 +14,23 @@ namespace KFCClone.Data.Repositories
             _mapper = mapper;
         }
 
-        //public async Task<RegisterResponseBodyDto> RegisterAsync(RegisterRequestBodyDto requestBodyDto)
-        //{
+        public async Task<RegisterResponseBodyDto> RegisterAsync(RegisterRequestBodyDto requestBodyDto)
+        {
+            if (_context.Users.Any(x => x.Email == requestBodyDto.Email))
+                throw new ApplicationException("User with this email already exists");
 
-        //    var user = _mapper.Map<User>(requestBodyDto);
-        //    await _context.Users.AddAsync(user);
-        //    await _context.SaveChangesAsync();
+            if (requestBodyDto.Password != requestBodyDto.ConfirmPassword)
+                throw new ApplicationException("Passwords do not match");
 
-        //    return _mapper.Map<RegisterResponseBodyDto>(user);
-        //}
+
+            var user = _mapper.Map<User>(requestBodyDto);
+
+            user.Password = BCrypt.Net.BCrypt.HashPassword(requestBodyDto.Password);
+
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<RegisterResponseBodyDto>(user);
+        }
     }
 }
