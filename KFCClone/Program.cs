@@ -12,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<KFCClone.Interfaces.IJwtUtils, JwtUtils>();
+
 builder.Services.AddTransient<ErrorHandlingMiddleware>(); 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

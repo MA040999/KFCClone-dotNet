@@ -28,9 +28,9 @@ namespace KFCClone.DTOs.Auth
         [Required(ErrorMessage = "City is required")]
         public string City { get; set; } = null!;
 
-        [Required(ErrorMessage = "IsGuestUser is required")]
-        public bool IsGuestUser { get; set; }
-
+        //[Required(ErrorMessage = "IsGuestUser is required")]
+        //public bool IsGuestUser { get; set; }
+        [RegularExpression(@"^((\+92)?(0092)?(92)?(0)?)(3)([0-9]{9})$", ErrorMessage = "Please enter a valid mobile number")]
         [Required(ErrorMessage = "Contact Number is required")]
         public string ContactNumber { get; set; } = null!;
     }

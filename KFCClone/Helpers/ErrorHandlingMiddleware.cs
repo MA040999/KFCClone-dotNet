@@ -13,12 +13,13 @@ namespace KFCClone.Helpers
             }
             catch (Exception ex)
             {
+                context.Response.ContentType = "application/json";
                 switch (ex)
                 {
-                    case ApplicationException _:
+                    case ApplicationException:
                         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                         break;
-                    case KeyNotFoundException _:
+                    case KeyNotFoundException:
                         context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                         break;
                     default:
