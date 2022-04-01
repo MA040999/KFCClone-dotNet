@@ -213,9 +213,9 @@ namespace KFCClone.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CatergoryId")
+                    b.Property<int>("categoryId")
                         .HasColumnType("int")
-                        .HasColumnName("catergory_id");
+                        .HasColumnName("category_id");
 
                     b.Property<int?>("DrinkCount")
                         .HasColumnType("int")
@@ -249,7 +249,7 @@ namespace KFCClone.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CatergoryId");
+                    b.HasIndex("categoryId");
 
                     b.ToTable("Products");
                 });
@@ -451,13 +451,13 @@ namespace KFCClone.Migrations
 
             modelBuilder.Entity("KFCClone.Models.Product", b =>
                 {
-                    b.HasOne("KFCClone.Models.Category", "Catergory")
+                    b.HasOne("KFCClone.Models.Category", "category")
                         .WithMany("Products")
-                        .HasForeignKey("CatergoryId")
+                        .HasForeignKey("categoryId")
                         .IsRequired()
-                        .HasConstraintName("FK_Products.catergory_id");
+                        .HasConstraintName("FK_Products.category_id");
 
-                    b.Navigation("Catergory");
+                    b.Navigation("category");
                 });
 
             modelBuilder.Entity("KFCClone.Models.ProductAddOn", b =>

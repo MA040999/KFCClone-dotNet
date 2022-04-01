@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-<<<<<<< HEAD
 using System.ComponentModel.DataAnnotations;
-=======
 using System.ComponentModel.DataAnnotations.Schema;
->>>>>>> feature/sign-up
-
 namespace KFCClone.Models
 {
     public partial class User
@@ -28,7 +24,6 @@ namespace KFCClone.Models
         [Required(ErrorMessage = "Address is required")]
         public string Address { get; set; } = null!;
 
-<<<<<<< HEAD
         [Required(ErrorMessage = "Country is required")]
         public string Country { get; set; } = null!;
 
@@ -38,16 +33,11 @@ namespace KFCClone.Models
         [Required(ErrorMessage = "City is required")]
         public string City { get; set; } = null!;
 
-        [Required(ErrorMessage = "IsGuestUser is required")]
-        public bool IsGuestUser { get; set; }
-
-        [Required(ErrorMessage = "Contact Number is required")]
-=======
         [Column("is_guest_user")]
         public bool IsGuestUser { get; set; }
 
+        [Required(ErrorMessage = "Contact Number is required")]
         [Column("contact_number")]
->>>>>>> feature/sign-up
         public string ContactNumber { get; set; } = null!;
 
         [ForeignKey("CountryId")]

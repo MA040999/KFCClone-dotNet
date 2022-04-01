@@ -151,7 +151,7 @@ namespace KFCClone.Data
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.CatergoryId).HasColumnName("catergory_id");
+                entity.Property(e => e.CategoryId).HasColumnName("category_id");
 
                 entity.Property(e => e.DrinkCount).HasColumnName("drink_count");
 
@@ -171,11 +171,11 @@ namespace KFCClone.Data
 
                 entity.Property(e => e.ProductPrice).HasColumnName("product_price");
 
-                entity.HasOne(d => d.Catergory)
+                entity.HasOne(d => d.Category)
                     .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.CatergoryId)
+                    .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Products.catergory_id");
+                    .HasConstraintName("FK_Products.category_id");
             });
 
             modelBuilder.Entity<ProductAddOn>(entity =>

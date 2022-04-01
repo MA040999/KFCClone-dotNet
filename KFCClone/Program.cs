@@ -5,14 +5,17 @@ using KFCClone.Data.Repositories;
 using Microsoft.AspNetCore.Identity;
 using KFCClone.Helpers;
 using KFCClone.Interfaces;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(o=>o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles) ;
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 
 builder.Services.AddTransient<ErrorHandlingMiddleware>();

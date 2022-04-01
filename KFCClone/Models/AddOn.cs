@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace KFCClone.Models
 {
@@ -17,7 +18,9 @@ namespace KFCClone.Models
         public bool IsUpsize { get; set; }
         public bool IsDrink { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<OrderProductAddOn> OrderProductAddOns { get; set; }
+        [JsonIgnore]
         public virtual ICollection<ProductAddOn> ProductAddOns { get; set; }
     }
 }

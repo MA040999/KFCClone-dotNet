@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace KFCClone.Models
 {
@@ -15,6 +16,7 @@ namespace KFCClone.Models
         public int AddOnId { get; set; }
 
         public virtual AddOn AddOn { get; set; } = null!;
+        [JsonIgnore]
         public virtual Product Product { get; set; } = null!;
     }
 }

@@ -22,6 +22,7 @@ namespace KFCClone.Models
         public bool IsMeal { get; set; }
 
         [ForeignKey(nameof(Category))]
+        [Column("category_id")]
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; } = null!;
         public virtual ICollection<OrderProduct> OrderProducts { get; set; }
