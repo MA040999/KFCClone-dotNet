@@ -1,8 +1,11 @@
 ﻿
 using KFCClone.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace KFCClone.Data
 {
+    //public partial class DataContext : IdentityDbContext<User, IdentityRole<int>, int>
     public partial class DataContext : DbContext
     {
         public DataContext()
@@ -232,46 +235,46 @@ namespace KFCClone.Data
                     .HasConstraintName("FK_State.country_id");
             });
 
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.Property(e => e.Id).HasColumnName("id");
+            //modelBuilder.Entity<User>(entity =>
+            //{
+            //    entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.Address)
-                    .HasMaxLength(150)
-                    .HasColumnName("address");
+            //    entity.Property(e => e.Address)
+            //        .HasMaxLength(150)
+            //        .HasColumnName("address");
 
-                entity.Property(e => e.City)
-                    .HasMaxLength(60)
-                    .HasColumnName("city");
+            //    entity.Property(e => e.City)
+            //        .HasMaxLength(60)
+            //        .HasColumnName("city");
 
-                entity.Property(e => e.ContactNumber)
-                    .HasMaxLength(60)
-                    .HasColumnName("contact_number");
+            //    entity.Property(e => e.ContactNumber)
+            //        .HasMaxLength(60)
+            //        .HasColumnName("contact_number");
 
-                entity.Property(e => e.Country)
-                    .HasMaxLength(60)
-                    .HasColumnName("country");
+            //    entity.Property(e => e.Country)
+            //        .HasMaxLength(60)
+            //        .HasColumnName("country");
 
-                entity.Property(e => e.Email)
-                    .HasMaxLength(90)
-                    .HasColumnName("email");
+            //    entity.Property(e => e.Email)
+            //        .HasMaxLength(90)
+            //        .HasColumnName("email");
 
-                entity.Property(e => e.IsGuestUser).HasColumnName("is_guest_user");
+            //    entity.Property(e => e.IsGuestUser).HasColumnName("is_guest_user");
 
-                entity.Property(e => e.Name)
-                    .HasMaxLength(90)
-                    .HasColumnName("name");
+            //    entity.Property(e => e.Name)
+            //        .HasMaxLength(90)
+            //        .HasColumnName("name");
 
-                entity.Property(e => e.Password)
-                    .HasMaxLength(60)
-                    .IsUnicode(false)
-                    .HasColumnName("password")
-                    .IsFixedLength();
+            //    entity.Property(e => e.Password)
+            //        .HasMaxLength(60)
+            //        .IsUnicode(false)
+            //        .HasColumnName("password")
+            //        .IsFixedLength();
 
-                entity.Property(e => e.State)
-                    .HasMaxLength(60)
-                    .HasColumnName("state");
-            });
+            //    entity.Property(e => e.State)
+            //        .HasMaxLength(60)
+            //        .HasColumnName("state");
+            //});
 
             OnModelCreatingPartial(modelBuilder);
         }

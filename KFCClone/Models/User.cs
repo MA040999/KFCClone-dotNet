@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+<<<<<<< HEAD
 using System.ComponentModel.DataAnnotations;
+=======
+using System.ComponentModel.DataAnnotations.Schema;
+>>>>>>> feature/sign-up
 
 namespace KFCClone.Models
 {
@@ -24,6 +28,7 @@ namespace KFCClone.Models
         [Required(ErrorMessage = "Address is required")]
         public string Address { get; set; } = null!;
 
+<<<<<<< HEAD
         [Required(ErrorMessage = "Country is required")]
         public string Country { get; set; } = null!;
 
@@ -37,7 +42,22 @@ namespace KFCClone.Models
         public bool IsGuestUser { get; set; }
 
         [Required(ErrorMessage = "Contact Number is required")]
+=======
+        [Column("is_guest_user")]
+        public bool IsGuestUser { get; set; }
+
+        [Column("contact_number")]
+>>>>>>> feature/sign-up
         public string ContactNumber { get; set; } = null!;
+
+        [ForeignKey("CountryId")]
+        public int CountryId { get; set; }
+
+        [ForeignKey("StateId")]
+        public int StateId { get; set; }
+
+        [ForeignKey("CityId")]
+        public int CityId { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
     }
