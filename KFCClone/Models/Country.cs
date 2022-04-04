@@ -16,7 +16,6 @@ namespace KFCClone.Models
 
         public virtual ICollection<State> States { get; set; }
 
-        [ForeignKey("CountryId")]
         public virtual ICollection<User> Users { get; set; } = null!;
     }
 }
