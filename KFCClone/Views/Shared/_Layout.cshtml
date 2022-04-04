@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - KFC Clone</title>
-    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>*@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -22,22 +22,39 @@
                 <a asp-area="" asp-controller="Home" asp-action="Privacy">
                     Sign in / Register
                 </a>
-            </button>         
+            </button>
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <div class='category-container'>
+            <div class='category-item category-item-selected'>
+                Everyday Value
+            </div>
+            <div class='category-item'>
+                Make it a Meal
+            </div>
+            <div class='category-item'>
+                Everyday Value
+            </div>
+            <div class='cart-btn'>
+                <span>
+                    3
+                </span>
+                <img src='~/Images/shopping-bag.svg' />
+            </div>
+        </div>
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - WebApplication2 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="footer-content">
+            &copy; 2022 - KFC Clone by Muhammed Ahmed, Abdur Rehman, Hassan Sohail
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
