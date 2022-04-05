@@ -23,7 +23,7 @@ body {
     --border-grey: #B4B4B4;
     --white: #FFFFFF;
     --red: #E21E2D;
-    --navbar-height: 7vh;
+    --navbar-height: 83px;
 }
 
 *, *::after, *::before {
@@ -128,8 +128,9 @@ body {
     font-size: 22px;
 }
 
-.footer-content {
+/*.footer-content {
     display: flex;
     justify-content: center;
     align-items: center;
-}
+    font-size: clamp(0.6em, 2vw, 1em);
+}*/
