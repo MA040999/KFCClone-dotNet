@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model IEnumerable<Category> 
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,6 +12,42 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/KFCClone.styles.css" asp-append-version="true" />
+    <style>
+        .category-item {
+            padding: 1.6em;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: color 200ms ease-in-out;
+        }
+
+        .category-item:hover:not(.category-item-selected) {
+            color: #6a6a6a;
+        }
+
+        .category-item-selected {
+            background-color: var(--black);
+            border-radius: 21px;
+            color: var(--white);
+        }
+        .cart-btn {
+            background-color: var(--red);
+            border-radius: 21px;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            gap: 1.2em;
+            margin-left: auto;
+            margin-block: auto;
+            padding: 0.5em 1.2em;
+            min-width: 100px;
+            cursor: pointer;
+            color: var(--white);
+            font-weight: 700;
+            position: relative;
+            font-size: 22px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -18,16 +56,14 @@
                 <img class='logo' src="~/Images/KFC_logo.png"
                      alt="KFC Logo" />
             </a>
-            <button class='login-btn'>
-                <a asp-area="" asp-controller="Auth" asp-action="Login">
-                    Sign in / Register
-                </a>
-            </button>
+            <a class='login-link-btn' asp-area="" asp-controller="Auth" asp-action="Login">
+                Sign in / Register
+            </a>
         </nav>
     </header>
     <div class="container">
         <div class='category-container'>
-            <div class='category-item category-item-selected'>
+            @* <div class='category-item category-item-selected'>
                 Everyday Value
             </div>
             <div class='category-item'>
@@ -35,13 +71,15 @@
             </div>
             <div class='category-item'>
                 Everyday Value
-            </div>
-            <div class='cart-btn'>
-                <span>
-                    3
-                </span>
-                <img src='~/Images/shopping-bag.svg' />
-            </div>
+            </div> *@
+            @* @foreach (var item in Model)
+            {
+                <div class='category-item'>
+                   @Html.DisplayFor(modelItem => item.CategoryName)
+                </div>
+            } *@
+            
+            
         </div>
         <main role="main">
             @RenderBody()
@@ -50,6 +88,33 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                type: 'GET',
+                url: '/api/category',
+                success: function(data) {
+                    $.each(data, function(key, item){
+                        console.log(item);
+                        $(".category-container").append(
+                            `<div class='category-item'> ${item.categoryName} </div>`
+                        );
+                    })
+                },
+                complete: function(){
+                    $(".category-container").append(
+                        `<div class='cart-btn'>
+                            <span>
+                                ${3}
+                            </span>
+                            <img src='/Images/shopping-bag.svg' />
+                        </div>`
+                    )
+                }
+
+            })
+        })
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

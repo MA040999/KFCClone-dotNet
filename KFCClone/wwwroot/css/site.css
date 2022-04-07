@@ -18,44 +18,61 @@ body {
 }*/
 
 :root {
-    --black: #1E1E1E;
-    --grey: #E6E6E6;
-    --border-grey: #B4B4B4;
-    --white: #FFFFFF;
-    --red: #E21E2D;
-    --navbar-height: 83px;
+  --black: #1e1e1e;
+  --grey: #e6e6e6;
+  --border-grey: #b4b4b4;
+  --white: #ffffff;
+  --red: #e21e2d;
+  --navbar-height: 83px;
 }
 
-*, *::after, *::before {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
 .logo {
-    width: 65px;
-    padding-bottom: 0.2em;
-    padding-top: 0.5em;
-    margin-left: 1em;
+  width: 65px;
+  padding-bottom: 0.2em;
+  padding-top: 0.5em;
+  margin-left: 1em;
 }
 
-
-.login-btn {
-    background-color: var(--black);
-    border-radius: 11px;
-    color: var(--white);
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 400;
-    padding: 0.7em 2em;
-    text-align: center;
-    transition: all .3s ease-in-out;
-    outline: none;
-    border: none;
+.login-link-btn {
+  background-color: var(--black);
+  border-radius: 11px;
+  color: var(--white);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 0.7em 2em;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+  outline: none;
+  border: none;
 }
 
-.login-btn > a {
-    color: var(--white);
-    text-decoration: none;
+.login-link-btn {
+  color: var(--white);
+  text-decoration: none;
+}
+
+.input-fields-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  width: min(100%, 350px);
+}
+
+.input-field {
+  border-radius: 10px;
+  background-color: var(--grey);
+  outline: none;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  border: 1px solid var(--border-grey);
 }
