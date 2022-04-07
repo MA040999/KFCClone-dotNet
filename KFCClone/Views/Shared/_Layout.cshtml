@@ -1,6 +1,4 @@
-﻿@model IEnumerable<Category> 
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -19,6 +17,8 @@
             font-size: 13px;
             font-weight: 600;
             transition: color 200ms ease-in-out;
+            text-decoration: none;
+            color: var(--black)
         }
 
         .category-item:hover:not(.category-item-selected) {
@@ -69,6 +69,7 @@
             <div class='category-item'>
                 Make it a Meal
             </div>
+            
             <div class='category-item'>
                 Everyday Value
             </div> *@
@@ -92,12 +93,13 @@
         $(document).ready(function() {
             $.ajax({
                 type: 'GET',
-                url: '/api/category',
+                url: '/Category/GetCategories',
                 success: function(data) {
                     $.each(data, function(key, item){
-                        console.log(item);
                         $(".category-container").append(
-                            `<div class='category-item'> ${item.categoryName} </div>`
+                            `<a href="/Category/${item.id}" class='category-item'>
+                                ${item.categoryName}
+                            </a>`
                         );
                     })
                 },
