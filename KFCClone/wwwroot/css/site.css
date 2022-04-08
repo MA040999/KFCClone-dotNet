@@ -1,26 +1,8 @@
-/*html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
-}*/
-
 :root {
   --black: #1e1e1e;
   --grey: #e6e6e6;
   --border-grey: #b4b4b4;
+  --dark-grey: #8f8f8f;
   --white: #ffffff;
   --red: #e21e2d;
   --navbar-height: 83px;
@@ -57,6 +39,11 @@ body {
 }
 
 .login-link-btn {
+  color: var(--white);
+  text-decoration: none;
+}
+
+.login-link-btn:hover {
   color: var(--white);
   text-decoration: none;
 }

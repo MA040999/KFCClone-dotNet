@@ -1,0 +1,26 @@
+.homepage-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 3em auto;
+  padding: 0 1em;
+}
+
+.homepage-container .carousel-inner {
+  border-radius: 25px;
+}
+.homepage-container .carousel-indicators {
+  bottom: -40px;
+}
+
+.homepage-container .carousel-indicators > button {
+  border-radius: 8px;
+  width: 25px;
+  height: 8px;
+  background-color: var(--dark-grey);
+  border: 0;
+}
+
+.homepage-container .carousel-indicators > button.active {
+  width: 50px;
+  background-color: var(--red);
+}
