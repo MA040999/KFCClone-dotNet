@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KFCClone.Controllers
 {
-    [Route("api/auth")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    //[Route("api/auth")]
+    //[ApiController]
+    public class AuthController : Controller
     {
         private readonly IAuthRepository _auth;
         public AuthController(IAuthRepository authRepository)
@@ -21,6 +21,11 @@ namespace KFCClone.Controllers
             if (requestBodyDto == null) return BadRequest();
 
             return Ok(await _auth.RegisterAsync(requestBodyDto));
+        }
+
+        public IActionResult Login()
+        {
+            return View();
         }
     }
 }

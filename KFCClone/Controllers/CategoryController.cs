@@ -4,26 +4,29 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KFCClone.Controllers
 {
-    [Route("api/category")]
-    [ApiController]
-    public class CategoryController : ControllerBase
+    // [Route("api/category")]
+    // [ApiController]
+    public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
         public CategoryController(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
-
         [HttpGet()]
+        [Route("Category/GetCategories")]
         public async Task<IActionResult> GetCategories()
         {
             return Ok(await _categoryRepository.GetCategoriesAsync());
         }
 
-        [HttpGet("{categoryId}")]
-        public async Task<IActionResult> GetProductsByCategory([FromRoute] int categoryId)
+        [HttpGet]
+        [Route("Category/{categoryId}")]
+        public async Task<IActionResult> Index(int categoryId)
         {
-            return Ok(await _categoryRepository.GetCategoryProducts(categoryId));
+            return View(await _categoryRepository.GetCategoryProducts(categoryId));
         }
+
+
     }
 }
