@@ -16,6 +16,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IHomeRepository, HomeRepository>();
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 
 builder.Services.AddTransient<ErrorHandlingMiddleware>();

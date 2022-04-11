@@ -213,13 +213,17 @@ namespace KFCClone.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("categoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int")
                         .HasColumnName("category_id");
 
                     b.Property<int?>("DrinkCount")
                         .HasColumnType("int")
                         .HasColumnName("drink_count");
+
+                    b.Property<bool?>("IsHomePageProduct")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_home_page_product");
 
                     b.Property<bool>("IsMeal")
                         .HasColumnType("bit")
@@ -249,7 +253,7 @@ namespace KFCClone.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("categoryId");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -356,7 +360,8 @@ namespace KFCClone.Migrations
 
                     b.Property<string>("ContactNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("contact_number");
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
@@ -366,7 +371,8 @@ namespace KFCClone.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsGuestUser")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("is_guest_user");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -451,13 +457,13 @@ namespace KFCClone.Migrations
 
             modelBuilder.Entity("KFCClone.Models.Product", b =>
                 {
-                    b.HasOne("KFCClone.Models.Category", "category")
+                    b.HasOne("KFCClone.Models.Category", "Category")
                         .WithMany("Products")
-                        .HasForeignKey("categoryId")
+                        .HasForeignKey("CategoryId")
                         .IsRequired()
                         .HasConstraintName("FK_Products.category_id");
 
-                    b.Navigation("category");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("KFCClone.Models.ProductAddOn", b =>
@@ -492,29 +498,23 @@ namespace KFCClone.Migrations
 
             modelBuilder.Entity("KFCClone.Models.User", b =>
                 {
-                    b.HasOne("KFCClone.Models.City", "City")
+                    b.HasOne("KFCClone.Models.City", null)
                         .WithMany("Users")
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KFCClone.Models.Country", "Country")
+                    b.HasOne("KFCClone.Models.Country", null)
                         .WithMany("Users")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KFCClone.Models.State", "State")
+                    b.HasOne("KFCClone.Models.State", null)
                         .WithMany("Users")
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("City");
-
-                    b.Navigation("Country");
-
-                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("KFCClone.Models.AddOn", b =>

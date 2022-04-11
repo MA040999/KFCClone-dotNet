@@ -25,6 +25,10 @@ namespace KFCClone.Models
         [Column("category_id")]
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; } = null!;
+
+        [Column("is_home_page_product")]
+        public bool? IsHomePageProduct { get; set; }
+
         public virtual ICollection<OrderProduct> OrderProducts { get; set; }
         public virtual ICollection<ProductAddOn> ProductAddOns { get; set; }
     }
