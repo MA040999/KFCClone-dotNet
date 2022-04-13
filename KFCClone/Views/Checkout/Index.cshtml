@@ -28,122 +28,6 @@
         .user-details-fields > select{
             width: calc(33% - 2em);
         }
-        .payment-container{
-            width: calc(100% - 2em);
-        }
-        .payment-container > *{
-            margin: 1em 0;
-        }
-        .payment-container > h4 {
-            font-size: 1.5em;
-        }
-        .payment-method{
-            background-color: var(--black);
-            border-radius: 20px;
-            padding: 1.3em;
-            padding-left: 3.5em;
-            width: 400px;
-            max-width: 100%;
-            font-weight: 600;
-            color: var(--white);
-            display: flex;
-            gap: 1em;
-            align-items: center;
-            position: relative;
-            cursor: pointer;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        .payment-method input, .save-info-checkbox input{
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-        }
-        .radio-btn {
-            position: absolute;
-            top: 50%;
-            left: 0.8em;
-            transform: translateY(-50%);
-            height: 25px;
-            width: 25px;
-            border: 1px solid var(--border-grey);
-            border-radius: 50%;
-            overflow: hidden;
-        }
-        .payment-method input:checked ~ .radio-btn::after{
-            display: block;
-        }
-        .radio-btn::after{
-            content: "";
-            position: absolute;
-            background-color: var(--border-grey);
-            top: 50%;
-            transform: translate(-50%, -50%);
-            left: 50%;
-            width:75%;
-            border-radius: 50%;
-            aspect-ratio: 1;
-            display: none;
-        }
-        .save-info-checkbox{
-            display: flex;
-            gap: 1em;
-            align-items: center;
-            justify-content: center;
-            font-size: clamp(1em, 2vw, 1.3em);
-            position: relative;
-            cursor: pointer;
-            padding-left: 2.5em;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        .checkbox {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            height: 25px;
-            width: 25px;
-            background-color: var(--light-black);
-            border: 1px solid var(--border-grey);
-            border-radius: 6px;
-        }
-        .checkbox:after {
-            content: "";
-            position: absolute;
-            display: none;
-            left: 30%;
-            top: 30%;
-            width: 7px;
-            height: 12px;
-            border: 1px solid var(--border-grey);
-            border-width: 0 3px 3px 0;
-            -webkit-transform: rotate(45deg) translate(-25%, -25%);
-            -ms-transform: rotate(45deg) translate(-25%, -25%);
-            transform: rotate(45deg) translate(-25%, -25%);
-        }
-        .save-info-checkbox input:checked ~ .checkbox:after {
-            display: block;
-        }
-        .login-container {
-            width: 100%;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-block: 10vw;
-            gap: 4em;
-        }
-
-        .register-link {
-            color: var(--red);
-            font-weight: 700;
-        }
     </style>
 </head>
 
@@ -152,8 +36,8 @@
     <div class="checkout-content">
         <div class="user-info-section">
             <div class="login-type-selector">
-                <span>Login</span>
-                <span class="active">Guest User</span>
+                <span id="login" class="active">Login</span>
+                <span id="guest_user">Guest User</span>
             </div>
             <form class="user-guest-email">
                 <input class="input-field" autocomplete="email" type="email" name="email" id="email" placeholder="Email Address">
@@ -182,24 +66,7 @@
                     </label>
                 </div>
             </form>
-            <form class='login-container'>
-
-                <h2>Login with your account</h2>
-
-                <div class="input-fields-container">
-                    <input class="input-field" type="email" placeholder="Email Address" autocomplete="email" />
-                    <input class="input-field" type="password" placeholder="Password" autocomplete="current-password" />
-                </div>
-
-                <div class='signin-btn-container'>
-                    <button class="primary-button" type="submit">Sign In</button>
-                    <p>
-                        New user?  <a class='register-link' asp-area="" asp-controller="Auth" asp-action="Register">
-                            Register
-                        </a>
-                    </p>
-                </div>
-            </form>
+            @await Html.PartialAsync("_LoginForm")
         </div>
         <div class="cart-summary-section">
             <h3>Cart Summary</h3>
@@ -256,9 +123,20 @@
         $('.login-type-selector span').click(function () {
             $('.login-type-selector span').removeClass('active');
             $(this).addClass('active');
+            if($(this).attr('id') !== 'login'){
+                $('.login-container').hide()
+                $('.user-details-fields').hide();
+                $('.user-guest-email').show() 
+            }
+            else{
+                $('.login-container').show()
+                $('.user-details-fields').hide();
+                $('.user-guest-email').hide()
+            }
         });
 
         $('.primary-button').click(function(e){
+            if($(this).attr('id') === 'login') return
             e.preventDefault();
             $('.user-guest-email').hide();
             $('.user-details-fields').show();
