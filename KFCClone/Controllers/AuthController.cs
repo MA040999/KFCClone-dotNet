@@ -22,5 +22,15 @@ namespace KFCClone.Controllers
 
             return Ok(await _auth.RegisterAsync(requestBodyDto));
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestBodyDto requestBodyDto)
+        {
+            if (requestBodyDto == null) 
+                return BadRequest();
+
+            return Ok(await _auth.LoginAsync(requestBodyDto));
+        }
+
     }
 }

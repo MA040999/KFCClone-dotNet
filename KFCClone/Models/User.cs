@@ -24,14 +24,6 @@ namespace KFCClone.Models
         [Required(ErrorMessage = "Address is required")]
         public string Address { get; set; } = null!;
 
-        [Required(ErrorMessage = "Country is required")]
-        public string Country { get; set; } = null!;
-
-        [Required(ErrorMessage = "State is required")]
-        public string State { get; set; } = null!;
-
-        [Required(ErrorMessage = "City is required")]
-        public string City { get; set; } = null!;
 
         [Column("is_guest_user")]
         public bool IsGuestUser { get; set; }
