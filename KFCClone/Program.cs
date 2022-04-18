@@ -36,6 +36,8 @@ if (app.Environment.IsDevelopment())
     //app.UseSwagger();
     //app.UseSwaggerUI();
 
+    // app.UseDeveloperExceptionPage();
+    app.UseExceptionHandler("/Error");
 }
 else
 {
@@ -52,7 +54,7 @@ app.UseRouting();
 //app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseMiddleware<ErrorHandlingMiddleware>();
+// app.UseMiddleware<ErrorHandlingMiddleware>();
 
 //app.MapControllers();
 

@@ -13,6 +13,7 @@ namespace KFCClone.DTOs.Auth
         [Required(ErrorMessage = "Confirm Passowrd is required")]
         public string ConfirmPassword { get; set; } = null!;
 
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; } = null!;
 

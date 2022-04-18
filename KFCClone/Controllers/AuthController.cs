@@ -42,8 +42,12 @@ namespace KFCClone.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Email, Password")] LoginRequestBodyDto requestBodyDto)
         {
-            if (ModelState.IsValid)
-                return View(await _auth.LoginAsync(requestBodyDto));
+            if (ModelState.IsValid){
+                LoginResponseBodyDto loginResponse = await _auth.LoginAsync(requestBodyDto);
+                if(loginResponse != null){
+                    return RedirectToAction("Index", "Home", new RouteValueDictionary(requestBodyDto));
+                }
+            }
 
             return View(requestBodyDto);
         }

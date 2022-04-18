@@ -1,3 +1,4 @@
+@model KFCClone.DTOs.Auth.LoginRequestBodyDto
 <head>
     <style>
         .login-container {
@@ -18,13 +19,18 @@
 
     </style>
 </head>
-<form class='login-container'>
+<form asp-action='Login' class='login-container'>
 
     <h2>Login with your account</h2>
 
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
     <div class="input-fields-container">
-        <input class="input-field" type="email" placeholder="Email Address" autocomplete="email" />
-        <input class="input-field" type="password" placeholder="Password" autocomplete="current-password" />
+        <input asp-for='Email' class="input-field" type="email" placeholder="Email Address" autocomplete="email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+
+        <input asp-for='Password' class="input-field" type="password" placeholder="Password" autocomplete="current-password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
     </div>
 
     <div class='signin-btn-container'>
@@ -37,3 +43,7 @@
     </div>
 
 </form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
