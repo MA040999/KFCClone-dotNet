@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KFCClone.Controllers
 {
-    [Route("api/auth")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    //[Route("api/auth")]
+    //[ApiController]
+    public class AuthController : Controller
     {
         private readonly IAuthRepository _auth;
         public AuthController(IAuthRepository authRepository)
@@ -23,14 +23,29 @@ namespace KFCClone.Controllers
             return Ok(await _auth.RegisterAsync(requestBodyDto));
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequestBodyDto requestBodyDto)
-        {
-            if (requestBodyDto == null) 
-                return BadRequest();
+        // [HttpPost("login")]
+        // public async Task<IActionResult> Login([FromBody] LoginRequestBodyDto requestBodyDto)
+        // {
+        //     if (requestBodyDto == null) 
+        //         return BadRequest();
 
-            return Ok(await _auth.LoginAsync(requestBodyDto));
+        //     return Ok(await _auth.LoginAsync(requestBodyDto));
+        // }
+        
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login([Bind("Email, Password")] LoginRequestBodyDto requestBodyDto)
+        {
+            if (ModelState.IsValid)
+                return View(await _auth.LoginAsync(requestBodyDto));
+
+            return View(requestBodyDto);
+        }
     }
 }

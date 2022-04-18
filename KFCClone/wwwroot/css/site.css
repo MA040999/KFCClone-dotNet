@@ -1,0 +1,87 @@
+:root {
+  --black: #1e1e1e;
+  --light-black: #343434;
+  --grey: #e6e6e6;
+  --border-grey: #b4b4b4;
+  --dark-grey: #8f8f8f;
+  --white: #ffffff;
+  --red: #e21e2d;
+  --navbar-height: 83px;
+}
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.logo {
+  width: 65px;
+  padding-bottom: 0.2em;
+  padding-top: 0.5em;
+  margin-left: 1em;
+}
+
+.login-link-btn {
+  background-color: var(--black);
+  border-radius: 11px;
+  color: var(--white);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 0.7em 2em;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+  outline: none;
+  border: none;
+}
+
+.login-link-btn {
+  color: var(--white);
+  text-decoration: none;
+}
+
+.login-link-btn:hover {
+  color: var(--white);
+  text-decoration: none;
+}
+
+.input-fields-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  width: min(100%, 350px);
+  padding: 0 2em;
+}
+
+.input-field {
+  border-radius: 10px;
+  background-color: var(--grey);
+  outline: none;
+  padding: 0.5rem 1em;
+  font-size: clamp(0.8em, 2vw, 1em);
+  border: 1px solid var(--border-grey);
+  resize: none;
+}
+
+.primary-button {
+  border-radius: 15px;
+  outline: none;
+  border: none;
+  padding: 0.8em 2em;
+  background-color: var(--red);
+  color: var(--white);
+  font-size: 1em;
+  width: min(100%, 350px);
+  align-self: center;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.primary-button:active {
+  transform: translateY(-3px);
+}

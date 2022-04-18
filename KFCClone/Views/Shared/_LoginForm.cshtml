@@ -1,0 +1,39 @@
+<head>
+    <style>
+        .login-container {
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-block: 10%;
+            gap: 4em;
+        }
+
+        .register-link {
+            color: var(--red);
+            font-weight: 700;
+        }
+
+    </style>
+</head>
+<form class='login-container'>
+
+    <h2>Login with your account</h2>
+
+    <div class="input-fields-container">
+        <input class="input-field" type="email" placeholder="Email Address" autocomplete="email" />
+        <input class="input-field" type="password" placeholder="Password" autocomplete="current-password" />
+    </div>
+
+    <div class='signin-btn-container'>
+        <button id="login" class="primary-button" type="submit">Sign In</button>
+        <p>
+            New user?  <a class='register-link' asp-area="" asp-controller="Auth" asp-action="Register">
+                Register
+            </a>
+        </p>
+    </div>
+
+</form>

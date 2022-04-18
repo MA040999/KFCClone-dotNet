@@ -1,0 +1,67 @@
+﻿@model List<KFCClone.Models.Product>
+@{
+    ViewData["Title"] = "Home";
+}
+
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+</head>
+
+<div class="homepage-container">
+    <div class="carousel-container">
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="/Images/promotion-image-1.png" class="d-block w-100" alt="promotion-image-1">
+            </div>
+            <div class="carousel-item">
+                <img src="/Images/promotion-image-2.png" class="d-block w-100" alt="promotion-image-2">
+            </div>
+           
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    </div>
+    
+    <h4 class="heading-container">
+        @Model[0].Category.CategoryName
+    </h4>
+    <div class="products-container">
+        @foreach (var item in Model)
+        {
+            <a class="product-card" href="#">
+                <img src="/Images/@item.ProductImage" alt="@item.ProductName"/>
+                <div class="product-card-content">
+                    <h3>@item.ProductName</h3>
+                    <p>@item.ProductDescription</p>
+                    <div class="price-container">
+                        <h2>PKR @item.ProductPrice</h2>
+                        <div class="add-to-cart-container">
+                            <img src='/Images/shopping-bag.svg' />
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+        }
+    </div>
+</div>
+
+ <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
