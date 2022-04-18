@@ -10,6 +10,8 @@ namespace KFCClone.Profiles
         {
             CreateMap<RegisterRequestBodyDto, User>();
             CreateMap<User, RegisterResponseBodyDto>();
+
+            CreateMap<User, LoginResponseBodyDto>();
         }
     }
 }

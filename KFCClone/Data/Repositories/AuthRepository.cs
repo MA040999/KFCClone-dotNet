@@ -18,6 +18,28 @@ namespace KFCClone.Data.Repositories
             _jwtUtils = jwtUtils;
         }
 
+        public async Task<LoginResponseBodyDto> LoginAsync(LoginRequestBodyDto requestBodyDto)
+        {
+                
+            var user = _context.Users.SingleOrDefault(x => x.Email == requestBodyDto.Email);
+             //var user = await _context.Users.FindAsync(requestBodyDto.Email);      
+
+                if (user == null || !BCrypt.Net.BCrypt.Verify(requestBodyDto.Password, user.Password))
+                    throw new ApplicationException("Username or password is incorrect");
+
+            
+
+            var response = _mapper.Map<LoginResponseBodyDto>(user);
+                response.Token = _jwtUtils.GenerateJwt(user);
+
+            response.Country = _context.Countries.SingleOrDefault(x => x.Id == user.CountryId)!.CountryName;
+            response.State = _context.States.SingleOrDefault(x => x.Id == user.StateId)!.StateName;
+            response.City = _context.Cities.SingleOrDefault(x => x.Id == user.CityId)!.CityName;
+
+            return response;
+
+        }
+        
         public async Task<RegisterResponseBodyDto> RegisterAsync(RegisterRequestBodyDto requestBodyDto)
         {
             if (_context.Users.Any(x => x.Email == requestBodyDto.Email))
