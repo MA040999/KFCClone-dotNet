@@ -12,5 +12,6 @@
         public bool IsGuestUser { get; set; }
         public string ContactNumber { get; set; } = null!;
         public string Token { get; set; } = null!;
+        public string? ErrorMessage { get; set; } = null;
     }
 }

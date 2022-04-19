@@ -9,3 +9,18 @@
 .signin-btn-container > p {
   font-weight: 500;
 }
+
+.login-error-message {
+  margin: 0 auto;
+  font-weight: 700;
+  color: var(--red);
+  font-size: 1.1em;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  font-weight: 500;
+  color: var(--red);
+}

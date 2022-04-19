@@ -44,11 +44,11 @@ namespace KFCClone.Controllers
         {
             if (ModelState.IsValid){
                 LoginResponseBodyDto loginResponse = await _auth.LoginAsync(requestBodyDto);
-                if(loginResponse != null){
+                if(loginResponse.ErrorMessage == null)
                     return RedirectToAction("Index", "Home", new RouteValueDictionary(requestBodyDto));
-                }
+                
+                ViewBag.ErrorMessage = loginResponse.ErrorMessage;
             }
-
             return View(requestBodyDto);
         }
     }

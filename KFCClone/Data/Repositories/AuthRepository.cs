@@ -24,13 +24,15 @@ namespace KFCClone.Data.Repositories
             var user = _context.Users.SingleOrDefault(x => x.Email == requestBodyDto.Email);
              //var user = await _context.Users.FindAsync(requestBodyDto.Email);      
 
-                if (user == null || !BCrypt.Net.BCrypt.Verify(requestBodyDto.Password, user.Password))
-                    throw new ApplicationException("Username or password is incorrect");
-
-            
+            if (user == null || !BCrypt.Net.BCrypt.Verify(requestBodyDto.Password, user.Password)){
+                return new LoginResponseBodyDto{
+                    ErrorMessage = "Invalid Email or Password"
+                };
+            }
 
             var response = _mapper.Map<LoginResponseBodyDto>(user);
-                response.Token = _jwtUtils.GenerateJwt(user);
+
+            response.Token = _jwtUtils.GenerateJwt(user);
 
             response.Country = _context.Countries.SingleOrDefault(x => x.Id == user.CountryId)!.CountryName;
             response.State = _context.States.SingleOrDefault(x => x.Id == user.StateId)!.StateName;
