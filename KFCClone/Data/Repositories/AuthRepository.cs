@@ -21,7 +21,7 @@ namespace KFCClone.Data.Repositories
         public async Task<LoginResponseBodyDto> LoginAsync(LoginRequestBodyDto requestBodyDto)
         {
                 
-            var user = _context.Users.SingleOrDefault(x => x.Email == requestBodyDto.Email);
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Email == requestBodyDto.Email);
              //var user = await _context.Users.FindAsync(requestBodyDto.Email);      
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(requestBodyDto.Password, user.Password)){

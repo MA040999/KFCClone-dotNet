@@ -26,12 +26,12 @@
     <div class="input-fields-container">
         <div class="input-container">
             <input asp-for='Email' class="input-field" type="email" placeholder="Email Address" autocomplete="email" />
-            <span asp-validation-for="Email" class="text-danger"></span>
+            <span asp-validation-for="Email"></span>
         </div>
 
         <div class="input-container">
             <input asp-for='Password' class="input-field" type="password" placeholder="Password" autocomplete="current-password" />
-            <span asp-validation-for="Password" class="text-danger"></span>
+            <span asp-validation-for="Password"></span>
         </div>
 
         @if (ViewBag.ErrorMessage != null)
@@ -42,7 +42,7 @@
         }
     </div>
 
-    @* <div asp-validation-summary="All" class="text-danger"></div> *@
+    @* <div asp-validation-summary="All"></div> *@
 
     <div class='signin-btn-container'>
         <button id="login" class="primary-button" type="submit">Sign In</button>
