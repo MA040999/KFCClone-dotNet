@@ -74,3 +74,20 @@ for details on configuring this project to bundle and minify static web assets. 
   position: relative;
   font-size: 22px;
 }
+
+.username-container {
+  font-weight: 700;
+  color: var(--white);
+  background-color: var(--red);
+  border-radius: 11px;
+  font-size: clamp(0.7em, 2vw, 1em);
+  padding: 0.6em 1em;
+}
+
+.logged-in-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  margin-left: 1em;
+}

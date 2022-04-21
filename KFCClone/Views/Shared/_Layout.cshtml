@@ -75,9 +75,25 @@
                 <img class='logo' src="~/Images/KFC_logo.png"
                      alt="KFC Logo" />
             </a>
-            <a class='login-link-btn' asp-area="" asp-controller="Auth" asp-action="Login">
-                Sign in / Register
-            </a>
+            @if (@User.Identity!.IsAuthenticated)
+            
+            {
+                <div class="logged-in-container">
+                    <div class="username-container">
+                        @User.Identity.Name
+                    </div>
+                    <a class='login-link-btn' asp-area="" asp-controller="Auth" asp-action="Logout">
+                        Signout
+                    </a>
+                </div>
+            }
+            else 
+            {
+                <a class='login-link-btn' asp-area="" asp-controller="Auth" asp-action="Login">
+                    Sign in / Register
+                </a>
+            }
+            
         </nav>
     </header>
     <div class="body-content-container">

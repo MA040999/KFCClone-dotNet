@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using KFCClone.Helpers;
 using KFCClone.Interfaces;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,16 @@ builder.Services.AddScoped<IHomeRepository, HomeRepository>();
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 
 builder.Services.AddTransient<ErrorHandlingMiddleware>();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.SlidingExpiration = true;
+        options.AccessDeniedPath = "/Forbidden/";
+        options.LoginPath = "/Auth/Login/";
+    });
+    
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 //builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
@@ -50,7 +61,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//app.UseAuthentication();
+app.UseAuthentication();
 app.UseAuthorization();
 
 // app.UseMiddleware<ErrorHandlingMiddleware>();
@@ -64,5 +75,6 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "Category",
     pattern: "{controller=Category}/{action=Index}/{categoryId}");
+
 
 app.Run();
