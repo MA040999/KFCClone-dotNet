@@ -29,13 +29,20 @@ namespace KFCClone.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequestBodyDto requestBodyDto)
+        [HttpGet]
+        public IActionResult Register()
         {
-            if (requestBodyDto == null) return BadRequest();
-
-            return Ok(await _auth.RegisterAsync(requestBodyDto));
+            return View();
         }
+
+        // [AllowAnonymous]
+        // [HttpPost("register")]
+        // public async Task<IActionResult> Register([FromBody] RegisterRequestBodyDto requestBodyDto)
+        // {
+        //     if (requestBodyDto == null) return BadRequest();
+
+        //     return Ok(await _auth.RegisterAsync(requestBodyDto));
+        // }
 
         // [HttpPost("login")]
         // public async Task<IActionResult> Login([FromBody] LoginRequestBodyDto requestBodyDto)

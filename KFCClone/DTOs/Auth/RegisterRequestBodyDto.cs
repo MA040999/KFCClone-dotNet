@@ -4,8 +4,11 @@ namespace KFCClone.DTOs.Auth
 {
     public class RegisterRequestBodyDto
     {
-        [Required(ErrorMessage = "Name is required")]
-        public string Name { get; set; } = null!;
+        [Required(ErrorMessage = "First name is required")]
+        public string FirstName { get; set; } = null!;
+
+        [Required(ErrorMessage = "Last name is required")]
+        public string LastName { get; set; } = null!;
 
         [Required(ErrorMessage = "Passowrd is required")]
         public string Password { get; set; } = null!;
@@ -31,6 +34,7 @@ namespace KFCClone.DTOs.Auth
 
         //[Required(ErrorMessage = "IsGuestUser is required")]
         //public bool IsGuestUser { get; set; }
+        
         [RegularExpression(@"^((\+92)?(0092)?(92)?(0)?)(3)([0-9]{9})$", ErrorMessage = "Please enter a valid mobile number")]
         [Required(ErrorMessage = "Contact Number is required")]
         public string ContactNumber { get; set; } = null!;

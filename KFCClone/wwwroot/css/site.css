@@ -34,7 +34,6 @@
   padding: 0.6em 2em;
   font-weight: 400;
   text-align: center;
-  transition: all 0.3s ease-in-out;
   outline: none;
   border: none;
 }
@@ -47,14 +46,6 @@
 .login-link-btn:hover {
   color: var(--white);
   text-decoration: none;
-}
-
-.input-fields-container {
-  display: flex;
-  flex-direction: column;
-  gap: 2em;
-  width: min(100%, 350px);
-  padding: 0 2em;
 }
 
 .input-field {

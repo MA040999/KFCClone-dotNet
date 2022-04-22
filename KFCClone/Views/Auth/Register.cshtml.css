@@ -1,4 +1,4 @@
-.signin-btn-container {
+﻿.signin-btn-container {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -23,12 +23,30 @@
   gap: 0.4em;
   font-weight: 500;
   color: var(--red);
+  width: max(40%, 300px);
 }
 
 .input-fields-container {
   display: flex;
-  flex-direction: column;
-  gap: 2em;
-  width: min(100%, 350px);
+  gap: 3em 4em;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
   padding: 0 2em;
+}
+
+.address-field {
+  width: 85%;
+}
+
+.selects-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2em;
+  width: 85%;
+}
+
+.selects-container > * {
+  width: max(30%, 300px);
 }
