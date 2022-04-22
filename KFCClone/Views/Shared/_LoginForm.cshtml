@@ -19,10 +19,10 @@
 
     </style>
 </head>
-<form asp-controller='Auth' asp-action='Login' class='login-container'>
+<form asp-controller='Auth' asp-action='Login' asp-route-returnUrl="@ViewData["ReturnUrl"]" class='login-container'>
 
     <h2>Login with your account</h2>
-    
+
     <div class="input-fields-container">
         <div class="input-container">
             <input asp-for='Email' class="input-field" type="email" placeholder="Email Address" autocomplete="email" />
