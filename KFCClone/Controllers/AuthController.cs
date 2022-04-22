@@ -66,7 +66,7 @@ namespace KFCClone.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([Bind("Email, Password")] LoginRequestBodyDto requestBodyDto, string? returnUrl)
+        public async Task<IActionResult> Login([Bind("Email, Password")] LoginRequestBodyDto requestBodyDto, string? returnUrl, bool isCheckOutForm)
         {
             if (ModelState.IsValid){
                 var user = await _context.Users.SingleOrDefaultAsync(x => x.Email == requestBodyDto.Email);  
@@ -125,6 +125,10 @@ namespace KFCClone.Controllers
 
                 
                 // return RedirectToAction("Index", "Home", new RouteValueDictionary(requestBodyDto));
+
+                if(isCheckOutForm){
+                    return RedirectToAction("Index", "Checkout");
+                }
 
                 if(!string.IsNullOrEmpty(returnUrl)){
                     return LocalRedirect(returnUrl);

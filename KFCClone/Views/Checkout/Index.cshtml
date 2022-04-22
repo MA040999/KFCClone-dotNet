@@ -28,6 +28,10 @@
         .user-details-fields > select{
             width: calc(33% - 2em);
         }
+        .logged-in {
+           padding: 1em 0;
+           margin: 0;
+        }
     </style>
 </head>
 
@@ -35,38 +39,72 @@
     <h2>Checkout</h2>
     <div class="checkout-content">
         <div class="user-info-section">
-            <div class="login-type-selector">
-                <span id="login" class="active">Login</span>
-                <span id="guest_user">Guest User</span>
-            </div>
-            <form class="user-guest-email">
-                <input class="input-field" autocomplete="email" type="email" name="email" id="email" placeholder="Email Address">
-                <button class="primary-button" >Continue as Guest</button>
-            </form>
-            <form class="user-details-fields">
-                <input class="input-field" autocomplete="email" type="email" name="email" id="email" placeholder="Email Address">
-                <input class="input-field" autocomplete="mobile" type="text" name="phone_number" id="phone_number" placeholder="Phone Number">
-                <input class="input-field" autocomplete="name" type="text" name="first_name" id="first_name" placeholder="First Name">
-                <input class="input-field" autocomplete="name" type="text" name="last_name" id="last_name" placeholder="Last Name">
-                <textarea class="input-field" autocomplete="address-level1" type="text" name="address" id="address" placeholder="Address" cols="20" rows="5"></textarea>
-                <select class="input-field" name="country" id="country">
-                    <option value="1">Pakistan</option>
-                </select>
-                <select class="input-field" name="state" id="state">
-                    <option value="1">Sindh</option>
-                </select>
-                <select class="input-field" name="city" id="City">
-                    <option value="1">Karachi</option>
-                </select>
-                <div class="payment-container">
-                    <h4>Payment Method</h4>
-                    <label class="payment-method">Cash on Delivery
-                        <input type="radio" checked='checked' name="payment_method" id="cash_on_delivery" value="cash_on_delivery">
-                         <span class="radio-btn"></span>
-                    </label>
+            
+            
+             @if (@User.Identity!.IsAuthenticated)
+            {
+                <form class="user-details-fields logged-in">
+                    <input class="input-field" autocomplete="email" type="email" name="email" id="email" placeholder="Email Address">
+                    <input class="input-field" autocomplete="mobile" type="text" name="phone_number" id="phone_number" placeholder="Phone Number">
+                    <input class="input-field" autocomplete="name" type="text" name="first_name" id="first_name" placeholder="First Name">
+                    <input class="input-field" autocomplete="name" type="text" name="last_name" id="last_name" placeholder="Last Name">
+                    <textarea class="input-field" autocomplete="address-level1" type="text" name="address" id="address" placeholder="Address" cols="20" rows="5"></textarea>
+                    <select class="input-field" name="country" id="country">
+                        <option value="1">Pakistan</option>
+                    </select>
+                    <select class="input-field" name="state" id="state">
+                        <option value="1">Sindh</option>
+                    </select>
+                    <select class="input-field" name="city" id="City">
+                        <option value="1">Karachi</option>
+                    </select>
+                    <div class="payment-container">
+                        <h4>Payment Method</h4>
+                        <label class="payment-method">Cash on Delivery
+                            <input type="radio" checked='checked' name="payment_method" id="cash_on_delivery" value="cash_on_delivery">
+                            <span class="radio-btn"></span>
+                        </label>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <div class="login-type-selector">
+                    <span id="login" class="active">Login</span>
+                    <span id="guest_user">Guest User</span>
                 </div>
-            </form>
-            @await Html.PartialAsync("_LoginForm")
+
+                <form class="user-guest-email">
+                    <input class="input-field" autocomplete="email" type="email" name="email" id="email" placeholder="Email Address">
+                    <button class="primary-button" >Continue as Guest</button>
+                </form>
+
+                <form class="user-details-fields">
+                    <input class="input-field" autocomplete="email" type="email" name="email" id="email" placeholder="Email Address">
+                    <input class="input-field" autocomplete="mobile" type="text" name="phone_number" id="phone_number" placeholder="Phone Number">
+                    <input class="input-field" autocomplete="name" type="text" name="first_name" id="first_name" placeholder="First Name">
+                    <input class="input-field" autocomplete="name" type="text" name="last_name" id="last_name" placeholder="Last Name">
+                    <textarea class="input-field" autocomplete="address-level1" type="text" name="address" id="address" placeholder="Address" cols="20" rows="5"></textarea>
+                    <select class="input-field" name="country" id="country">
+                        <option value="1">Pakistan</option>
+                    </select>
+                    <select class="input-field" name="state" id="state">
+                        <option value="1">Sindh</option>
+                    </select>
+                    <select class="input-field" name="city" id="City">
+                        <option value="1">Karachi</option>
+                    </select>
+                    <div class="payment-container">
+                        <h4>Payment Method</h4>
+                        <label class="payment-method">Cash on Delivery
+                            <input type="radio" checked='checked' name="payment_method" id="cash_on_delivery" value="cash_on_delivery">
+                            <span class="radio-btn"></span>
+                        </label>
+                    </div>
+                </form>
+
+                @await Html.PartialAsync("_LoginForm", null, new ViewDataDictionary(ViewData){{"isCheckOutForm", true}})
+            }
         </div>
         <div class="cart-summary-section">
             <h3>Cart Summary</h3>
@@ -119,6 +157,7 @@
 <script>
     $(document).ready(function () {
         $('.user-details-fields').hide();
+        $('.logged-in').show();
         $('.user-guest-email').hide();
         $('.login-type-selector span').click(function () {
             $('.login-type-selector span').removeClass('active');
