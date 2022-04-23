@@ -5,7 +5,9 @@ namespace KFCClone
 {
     public interface IAuthRepository
     {
-        Task<RegisterResponseBodyDto> RegisterAsync(RegisterRequestBodyDto requestBodyDto);
-        Task<LoginResponseBodyDto> LoginAsync(LoginRequestBodyDto requestBodyDto);
+        Task RegisterAsync(RegisterRequestBodyDto requestBodyDto, HttpContext httpContext);
+        Task LoginAsync(LoginRequestBodyDto requestBodyDto, HttpContext httpContext);
+
+        Task<CheckoutUserDetailsDto> CheckGuestUserAsync(string Email);
     }
 }

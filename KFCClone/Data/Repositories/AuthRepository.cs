@@ -1,8 +1,12 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using KFCClone.DTOs.Auth;
 using KFCClone.Helpers;
 using KFCClone.Interfaces;
 using KFCClone.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace KFCClone.Data.Repositories
 {
@@ -18,31 +22,33 @@ namespace KFCClone.Data.Repositories
             _jwtUtils = jwtUtils;
         }
 
-        public async Task<LoginResponseBodyDto> LoginAsync(LoginRequestBodyDto requestBodyDto)
+        public Task<CheckoutUserDetailsDto> CheckGuestUserAsync(string Email)
         {
-                
+            throw new NotImplementedException();
+        }
+
+        public async Task LoginAsync(LoginRequestBodyDto requestBodyDto, HttpContext httpContext)
+        {
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Email == requestBodyDto.Email);
              //var user = await _context.Users.FindAsync(requestBodyDto.Email);      
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(requestBodyDto.Password, user.Password)){
-                return new LoginResponseBodyDto{
-                    ErrorMessage = "Invalid Email or Password"
-                };
+                throw new KeyNotFoundException("Invalid email or password");
             }
 
-            var response = _mapper.Map<LoginResponseBodyDto>(user);
+            SetAuthCookie(user.Email, user.Name, httpContext);
+            // var response = _mapper.Map<LoginResponseBodyDto>(user);
 
-            response.Token = _jwtUtils.GenerateJwt(user);
+            // response.Token = _jwtUtils.GenerateJwt(user);
 
-            response.Country = _context.Countries.SingleOrDefault(x => x.Id == user.CountryId)!.CountryName;
-            response.State = _context.States.SingleOrDefault(x => x.Id == user.StateId)!.StateName;
-            response.City = _context.Cities.SingleOrDefault(x => x.Id == user.CityId)!.CityName;
+            // response.Country = _context.Countries.SingleOrDefault(x => x.Id == user.CountryId)!.CountryName;
+            // response.State = _context.States.SingleOrDefault(x => x.Id == user.StateId)!.StateName;
+            // response.City = _context.Cities.SingleOrDefault(x => x.Id == user.CityId)!.CityName;
 
-            return response;
-
+            // return response;
         }
         
-        public async Task<RegisterResponseBodyDto> RegisterAsync(RegisterRequestBodyDto requestBodyDto)
+        public async Task RegisterAsync(RegisterRequestBodyDto requestBodyDto, HttpContext httpContext)
         {
             if (_context.Users.Any(x => x.Email == requestBodyDto.Email))
                 throw new ApplicationException("User with this email already exists");
@@ -50,22 +56,23 @@ namespace KFCClone.Data.Repositories
             if (requestBodyDto.Password != requestBodyDto.ConfirmPassword)
                 throw new ApplicationException("Passwords do not match");
 
-            List<Country>? country = _context.Countries.Where(x => x.CountryName.ToLower() == requestBodyDto.Country.ToLower()).ToList();
-            if (country.Count == 0)
+            Country? country = await _context.Countries.FindAsync(requestBodyDto.CountryId);
+            if (country == null)
                 throw new KeyNotFoundException("Invalid Country");
 
-            List<State>? state = _context.States.Where(x => x.StateName.ToLower() == requestBodyDto.State.ToLower() && x.CountryId == country[0].Id).ToList();
+            List<State>? state = _context.States.Where(x => x.Id == requestBodyDto.StateId && x.CountryId == country.Id).ToList();
             if (state.Count == 0)
                 throw new KeyNotFoundException("Invalid State");
 
-            List<City>? city = _context.Cities.Where(x => x.CityName.ToLower() == requestBodyDto.City.ToLower() && x.StateId == state[0].Id).ToList();
+            List<City>? city = _context.Cities.Where(x => x.Id == requestBodyDto.CityId && x.StateId == state[0].Id).ToList();
             if (city.Count == 0)
                 throw new KeyNotFoundException("Invalid City");
 
             User user = _mapper.Map<User>(requestBodyDto);
 
+            user.Name = $"{requestBodyDto.FirstName} {requestBodyDto.LastName}";
             user.IsGuestUser = false;
-            user.CountryId = country[0].Id;
+            user.CountryId = country.Id;
             user.StateId = state[0].Id;
             user.CityId = city[0].Id;
             user.Password = BCrypt.Net.BCrypt.HashPassword(requestBodyDto.Password);
@@ -73,15 +80,58 @@ namespace KFCClone.Data.Repositories
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
 
-            RegisterResponseBodyDto response = _mapper.Map<RegisterResponseBodyDto>(user);
+            SetAuthCookie(requestBodyDto.Email, requestBodyDto.FirstName + " " + requestBodyDto.LastName, httpContext);
 
-            response.Country = country[0].CountryName;
-            response.State = state[0].StateName;
-            response.City = city[0].CityName;
+            // RegisterResponseBodyDto response = _mapper.Map<RegisterResponseBodyDto>(user);
 
-            response.Token = _jwtUtils.GenerateJwt(user);
+            // response.Country = country.CountryName;
+            // response.State = state[0].StateName;
+            // response.City = city[0].CityName;
 
-            return response;
+            // response.Token = _jwtUtils.GenerateJwt(user);
+
+            // return response;
+        }
+
+        private async void SetAuthCookie(string Email, string Name, HttpContext httpContext){
+            var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Email, Email),
+                    new Claim(ClaimTypes.Name, Name),
+                };
+
+                var claimsIdentity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var authProperties = new AuthenticationProperties
+                {
+                    AllowRefresh = true,
+                    // Refreshing the authentication session should be allowed.
+
+                    //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                    // The time at which the authentication ticket expires. A 
+                    // value set here overrides the ExpireTimeSpan option of 
+                    // CookieAuthenticationOptions set with AddCookie.
+
+                    IsPersistent = true,
+                    // Whether the authentication session is persisted across 
+                    // multiple requests. When used with cookies, controls
+                    // whether the cookie's lifetime is absolute (matching the
+                    // lifetime of the authentication ticket) or session-based.
+
+                    //IssuedUtc = <DateTimeOffset>,
+                    // The time at which the authentication ticket was issued.
+
+                    //RedirectUri = <string>
+                    // The full path or absolute URI to be used as an http 
+                    // redirect response value.
+                };
+                var principal = new ClaimsPrincipal(claimsIdentity);  
+
+                await httpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme, 
+                    principal, 
+                    authProperties);
         }
     }
 }

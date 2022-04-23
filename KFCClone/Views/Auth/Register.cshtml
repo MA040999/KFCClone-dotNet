@@ -22,9 +22,13 @@
             font-weight: 700;
         }
 
+        .selects-container > .input-container {
+            width: max(30%, 300px);
+            flex-grow: 1;
+        }
     </style>
 </head>
-<form asp-controller='Auth' asp-action='Register' asp-route-returnUrl='@ViewData["ReturnUrl"]' asp-route-isCheckOutForm='@ViewData["isCheckOutForm"]' class='login-container'>
+<form asp-controller='Auth' asp-action='Register' class='login-container'>
 
     <h2>Register</h2>
 
@@ -65,29 +69,41 @@
         </div>
 
         <div class="selects-container">
-            <select class="input-field" name="country" id="country">
-                <option value="1">Pakistan</option>
-            </select>
-            <select class="input-field" name="state" id="state">
-                <option value="1">Sindh</option>
-            </select>
-            <select class="input-field" name="city" id="City">
-                <option value="1">Karachi</option>
-            </select>
+            <div class="input-container">
+                <select class="input-field" asp-for="CountryId" asp-items="Model.Countries">
+                    <option disabled selected>Country</option>
+                </select>
+                <span asp-validation-for="CountryId"></span>
+            </div>
+
+            <div class="input-container">
+                <select class="input-field" asp-for="StateId" asp-items="Model.States">
+                    <option disabled selected>State</option>
+                </select>
+                <span asp-validation-for="StateId"></span>
+            </div>
+            
+            <div class="input-container">
+                <select class="input-field" asp-for="CityId" asp-items="Model.Cities">
+                    <option disabled selected>City</option>
+                </select>
+                <span asp-validation-for="CityId"></span>
+            </div>
         </div>
 
-        @if (ViewBag.ErrorMessage != null)
-        {
-            <div class="login-error-message">
-                @ViewBag.ErrorMessage
-            </div>
-        }
+        
     </div>
 
     @* <div asp-validation-summary="All"></div> *@
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="login-error-message">
+            @ViewBag.ErrorMessage
+        </div>
+    }
 
     <div class='signin-btn-container'>
-        <button id="login" class="primary-button" type="submit">Create Account</button>
+        <button class="primary-button" type="submit">Create Account</button>
         <p>
             Already have an account?  <a class='register-link' asp-area="" asp-controller="Auth" asp-action="Login">
                 Login

@@ -46,7 +46,3 @@
   gap: 2em;
   width: 85%;
 }
-
-.selects-container > * {
-  width: max(30%, 300px);
-}

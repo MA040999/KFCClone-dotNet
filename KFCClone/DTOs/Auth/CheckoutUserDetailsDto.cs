@@ -1,24 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace KFCClone.DTOs.Auth
 {
-    public class RegisterRequestBodyDto
+    public class CheckoutUserDetailsDto
     {
         [Required(ErrorMessage = "First name is required")]
         public string FirstName { get; set; } = null!;
 
         [Required(ErrorMessage = "Last name is required")]
         public string LastName { get; set; } = null!;
-
-        [Required(ErrorMessage = "Passowrd is required")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; } = null!;
-
-        [Required(ErrorMessage = "Confirm Passowrd is required")]
-        [DataType(DataType.Password)]
-        public string ConfirmPassword { get; set; } = null!;
 
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         [Required(ErrorMessage = "Email is required")]
