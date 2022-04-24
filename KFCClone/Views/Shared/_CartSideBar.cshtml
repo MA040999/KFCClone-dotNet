@@ -1,0 +1,30 @@
+<div class="sidebar-container hide"></div>
+
+<div class="sidebar-content">
+    <div class="sidebar-heading">
+        <h2>Cart</h2>
+    </div>
+    <div class="sidebar-body">
+        
+        
+        @await Html.PartialAsync("_CartItem")
+        
+        
+    </div>
+    <div class="sidebar-footer">
+        <div class="sidebar-icon-person">
+            
+        </div>
+        @* <h3>{name}</h3> *@
+    </div>
+</div>
+
+ <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(document).on("click", '.cart-btn', function(event) {
+            $(".sidebar-container").toggleClass("hide");
+            $(".sidebar-content").toggleClass("float-in");
+        });
+    })
+</script>
