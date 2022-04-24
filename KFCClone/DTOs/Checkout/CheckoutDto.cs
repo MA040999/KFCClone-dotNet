@@ -22,4 +22,6 @@ namespace KFCClone.DTOs.Checkout
 public enum PaymentType
 {
     CashOnDelivery,
+    CreditCard,
+    DebitCard,
 }

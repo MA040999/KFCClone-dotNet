@@ -25,12 +25,22 @@ namespace KFCClone.Data.Repositories
             
             User? user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
             
+            bool IsNewGuestUser = false;
+            if(user == null){
+
+                user = new User();
+                user.Email = email;
+                
+                IsNewGuestUser = true;
+            }
+
             checkoutDto.UserDetails = _mapper.Map<CheckoutUserDetailsDto>(user);
-
             checkoutDto.UserDetails = _dropDownListUtils.SetDropDownListValues(checkoutDto.UserDetails);
+        
+            checkoutDto.UserDetails.FirstName = !string.IsNullOrEmpty(user!.Name) ? user.Name.Split(' ')[0] : "";
+            checkoutDto.UserDetails.LastName = !string.IsNullOrEmpty(user!.Name) ? user.Name.Split(' ')[1] : "";
 
-            checkoutDto.UserDetails.FirstName = user!.Name.Split(' ')[0];
-            checkoutDto.UserDetails.LastName = user!.Name.Split(' ')[1];
+            checkoutDto.UserDetails.IsNewGuestUser = IsNewGuestUser;
 
             return checkoutDto;
 
