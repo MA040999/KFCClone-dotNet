@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
 using KFCClone.DTOs.Auth;
+using KFCClone.DTOs.Checkout;
 using KFCClone.Interfaces;
 using KFCClone.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -37,7 +38,7 @@ namespace KFCClone.Controllers
         public IActionResult Register()
         {
             RegisterRequestBodyDto registerRequestBodyDto = new RegisterRequestBodyDto();
-
+            ViewBag.ErrorMessage = null;
             return View(_dropDownListUtils.SetDropDownListValues(registerRequestBodyDto));
             
         }
@@ -124,14 +125,5 @@ namespace KFCClone.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("Auth/CheckGuestUser")]
-        [AllowAnonymous]
-        public async Task<IActionResult> CheckGuestUser(LoginRequestBodyDto requestBodyDto)
-        {
-            if (requestBodyDto == null) return BadRequest();
-
-            return Ok(await _auth.CheckGuestUserAsync(requestBodyDto.Email));
-        }
     }
 }

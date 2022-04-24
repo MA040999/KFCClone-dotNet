@@ -5,5 +5,8 @@ namespace KFCClone.Interfaces
     public interface ICheckoutRepository
     {
         Task<CheckoutDto> GetUserDetailsAsync(string email);
+
+        // Task<CheckoutDto> CheckGuestUserAsync(string Email);
+
     }
 }

@@ -15,6 +15,7 @@ namespace KFCClone.DTOs.Checkout
         public CheckoutUserDetailsDto UserDetails { get; set; } = null!;
 
         public bool? RememberInfo { get; set; } = null;
+        public bool? IsGuestUser { get; set; } = null;
     }
 }
 

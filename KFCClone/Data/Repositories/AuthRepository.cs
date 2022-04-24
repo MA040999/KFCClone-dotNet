@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
 using KFCClone.DTOs.Auth;
+using KFCClone.DTOs.Checkout;
 using KFCClone.Helpers;
 using KFCClone.Interfaces;
 using KFCClone.Models;
@@ -21,12 +22,6 @@ namespace KFCClone.Data.Repositories
             _mapper = mapper;
             _jwtUtils = jwtUtils;
         }
-
-        public Task<CheckoutUserDetailsDto> CheckGuestUserAsync(string Email)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task LoginAsync(LoginRequestBodyDto requestBodyDto, HttpContext httpContext)
         {
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Email == requestBodyDto.Email);

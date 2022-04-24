@@ -204,6 +204,19 @@
   display: block;
 }
 
+.checkout-name-email-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  width: calc(100% - 2em);
+}
+
+.checkout-name {
+  color: var(--red);
+  font-weight: 700;
+  font-size: 1.2em;
+}
+
 @media screen and (max-width: 1065px) {
   .checkout-content {
     flex-direction: column;

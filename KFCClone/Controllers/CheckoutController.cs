@@ -1,4 +1,5 @@
-﻿using KFCClone.DTOs.Checkout;
+﻿using KFCClone.DTOs.Auth;
+using KFCClone.DTOs.Checkout;
 using KFCClone.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,26 +10,41 @@ namespace KFCClone.Controllers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICheckoutRepository _checkoutRepository;
-        private readonly IDropDownListUtils _dropDownListUtils;
 
-        public CheckoutController(IDropDownListUtils dropDownListUtils, IHttpContextAccessor httpContextAccessor, ICheckoutRepository checkoutRepository)
+        public CheckoutController(IHttpContextAccessor httpContextAccessor, ICheckoutRepository checkoutRepository)
         {
-            _dropDownListUtils = dropDownListUtils;
             _httpContextAccessor = httpContextAccessor;
             _checkoutRepository = checkoutRepository;
         }
         
         public async Task<IActionResult> Index()
         {
-            string email = _httpContextAccessor.HttpContext!.User.Claims.Where(x => x.Type.Contains("emailaddress")).ToList()[0].Value;
-            if (email == null)
+            var email = _httpContextAccessor.HttpContext!.User.Claims.Where(x => x.Type.Contains("emailaddress")).ToList();
+            if (email.Count == 0)
             {
-                return View();
+                CheckoutDto checkoutDto = new CheckoutDto();
+
+                return View(checkoutDto);
             }
             
-            CheckoutDto checkoutDetails = await _checkoutRepository.GetUserDetailsAsync(email);
+            CheckoutDto checkoutDetails = await _checkoutRepository.GetUserDetailsAsync(email[0].Value);
             
-            return View(_dropDownListUtils.SetDropDownListValues(checkoutDetails.UserDetails));
+            return View(checkoutDetails);
+        }
+
+        [HttpPost]
+        // [Route("Auth/CheckGuestUser")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CheckGuestUser(LoginRequestBodyDto requestBodyDto)
+        {
+            // if (requestBodyDto == null) return BadRequest();
+
+            // return Ok(await _auth.CheckGuestUserAsync(requestBodyDto.Email));
+
+            CheckoutDto checkoutDetails = await _checkoutRepository.GetUserDetailsAsync(requestBodyDto.Email);
+
+            ViewBag.IsGuestUser = true;
+            return View("Index", checkoutDetails);
         }
     }
 }

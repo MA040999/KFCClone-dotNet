@@ -1,4 +1,5 @@
 ﻿using KFCClone.DTOs.Auth;
+using KFCClone.DTOs.Checkout;
 using KFCClone.Models;
 
 namespace KFCClone
@@ -8,6 +9,5 @@ namespace KFCClone
         Task RegisterAsync(RegisterRequestBodyDto requestBodyDto, HttpContext httpContext);
         Task LoginAsync(LoginRequestBodyDto requestBodyDto, HttpContext httpContext);
 
-        Task<CheckoutUserDetailsDto> CheckGuestUserAsync(string Email);
     }
 }

@@ -10,10 +10,13 @@ namespace KFCClone.Data.Repositories
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        public CheckoutRepository(DataContext context, IMapper mapper)
+        private readonly IDropDownListUtils _dropDownListUtils;
+
+        public CheckoutRepository(DataContext context, IMapper mapper, IDropDownListUtils dropDownListUtils)
         {
             _context = context;
             _mapper = mapper;
+            _dropDownListUtils = dropDownListUtils;
         }
 
         public async Task<CheckoutDto> GetUserDetailsAsync(string email)
@@ -23,6 +26,11 @@ namespace KFCClone.Data.Repositories
             User? user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
             
             checkoutDto.UserDetails = _mapper.Map<CheckoutUserDetailsDto>(user);
+
+            checkoutDto.UserDetails = _dropDownListUtils.SetDropDownListValues(checkoutDto.UserDetails);
+
+            checkoutDto.UserDetails.FirstName = user!.Name.Split(' ')[0];
+            checkoutDto.UserDetails.LastName = user!.Name.Split(' ')[1];
 
             return checkoutDto;
 
