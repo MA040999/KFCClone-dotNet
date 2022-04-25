@@ -1,12 +1,13 @@
 ﻿@model KFCClone.DTOs.Checkout.CheckoutDto
 
 @{
-     ViewData["Title"] = "Checkout";
+    ViewData["Title"] = "Checkout";
 }
 
 <head>
     <style>
-        .user-guest-email, .user-details-fields {
+        .user-guest-email,
+        .user-details-fields {
             display: flex;
             flex-direction: column;
             gap: 2em;
@@ -14,27 +15,33 @@
             margin: auto 0;
             padding: 2em 0;
         }
-        .user-details-fields{
+
+        .user-details-fields {
             width: 100%;
             flex-direction: row;
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
         }
-        .user-details-fields > *{
+
+        .user-details-fields>* {
             width: calc(50% - 2em);
         }
-        .user-details-fields > #address{
+
+        .user-details-fields>#address {
             width: calc(100% - 2em);
         }
-        .user-details-fields > select{
+
+        .user-details-fields>select {
             width: calc(33% - 2em);
         }
+
         .logged-in {
-           padding: 1em 0;
-           margin: 0;
+            padding: 1em 0;
+            margin: 0;
         }
-        .checkout-name-email-container ~ #phone_number {
+
+        .checkout-name-email-container~#phone_number {
             width: calc(100% - 2em);
         }
     </style>
@@ -54,29 +61,46 @@
                         <span>
                             @Model.UserDetails.Email
                         </span>
-                        @* <input asp-for='UserDetails.Email' disabled class="input-field" autocomplete="email"  type="email" name="email" id="email" placeholder="Email Address">
-                        <input asp-for='UserDetails.FirstName' class="input-field" disabled type="text" id="first_name" name="first_name" value="@User.Identity!.Name!.Split(' ')[0]" />
-                        <input asp-for='UserDetails.LastName' class="input-field" disabled type="text" id="last_name" name="last_name" value="@User.Identity!.Name!.Split(' ')[1]" /> *@
+                        @* <input asp-for='UserDetails.Email' disabled class="input-field" autocomplete="email" type="email"
+                            name="email" id="email" placeholder="Email Address">
+                            <input asp-for='UserDetails.FirstName' class="input-field" disabled type="text" id="first_name"
+                            name="first_name" value="@User.Identity!.Name!.Split(' ')[0]" />
+                            <input asp-for='UserDetails.LastName' class="input-field" disabled type="text" id="last_name"
+                            name="last_name" value="@User.Identity!.Name!.Split(' ')[1]" /> *@
                     </div>
 
-                    <input asp-for='UserDetails.ContactNumber' class="input-field" autocomplete="mobile"  type="text" name="phone_number" id="phone_number" placeholder="Phone Number">
-                    
-                    <textarea asp-for='UserDetails.Address' class="input-field" autocomplete="address-level1" type="text" name="address" id="address" placeholder="Address" cols="20" rows="5"></textarea>
-                    
-                    <select asp-for='UserDetails.CountryId' class="input-field" name="country" id="country" asp-items="Model.UserDetails.Countries">
+                    <input asp-for='UserDetails.ContactNumber' class="input-field" autocomplete="mobile" type="text"
+                    name="phone_number" id="phone_number" placeholder="Phone Number">
+
+                    <textarea asp-for='UserDetails.Address' class="input-field" autocomplete="address-level1" type="text"
+                    name="address" id="address" placeholder="Address" cols="20" rows="5"></textarea>
+
+                    <select asp-for='UserDetails.CountryId' class="input-field" name="country" id="country"
+                    asp-items="Model.UserDetails.Countries">
                         <option disabled selected>Country</option>
                     </select>
-                    <select class="input-field" name="state" id="state" asp-for="UserDetails.StateId" asp-items="Model.UserDetails.States">
+                    <select class="input-field" name="state" id="state" asp-for="UserDetails.StateId"
+                    asp-items="Model.UserDetails.States">
                         <option disabled selected>State</option>
                     </select>
-                    <select class="input-field" name="city" id="City" asp-for="UserDetails.CityId" asp-items="Model.UserDetails.Cities">
+                    <select class="input-field" name="city" id="City" asp-for="UserDetails.CityId"
+                    asp-items="Model.UserDetails.Cities">
                         <option disabled selected>City</option>
                     </select>
 
                     <div class="payment-container">
                         <h4>Payment Method</h4>
                         <label class="payment-method">Cash on Delivery
-                            <input type="radio" checked='checked' name="payment_method" id="cash_on_delivery" value="cash_on_delivery">
+                            <input type="radio" checked='checked' name="payment_method" id="cash_on_delivery"
+                            value="cash_on_delivery">
+                            <span class="radio-btn"></span>
+                        </label>
+                        <label class="payment-method">Credit Card
+                            <input type="radio" name="payment_method" id="credit_card" value="credit_card">
+                            <span class="radio-btn"></span>
+                        </label>
+                        <label class="payment-method">Debit Card
+                            <input type="radio" name="payment_method" id="debit_card" value="debit_card">
                             <span class="radio-btn"></span>
                         </label>
                     </div>
@@ -91,27 +115,33 @@
                 @if (ViewBag.IsGuestUser ?? false)
                 {
                     <form class="user-details-fields">
-                        @* <input class="input-field" autocomplete="email" type="email" name="email" id="email" placeholder="Email Address">
-                        <input class="input-field" autocomplete="mobile" type="text" name="phone_number" id="phone_number" placeholder="Phone Number">
-                        <input class="input-field" autocomplete="name" type="text" name="first_name" id="first_name" placeholder="First Name">
-                        <input class="input-field" autocomplete="name" type="text" name="last_name" id="last_name" placeholder="Last Name">
-                        <textarea class="input-field" autocomplete="address-level1" type="text" name="address" id="address" placeholder="Address" cols="20" rows="5"></textarea>
-                        <select class="input-field" name="country" id="country">
+                        @* <input class="input-field" autocomplete="email" type="email" name="email" id="email"
+                            placeholder="Email Address">
+                            <input class="input-field" autocomplete="mobile" type="text" name="phone_number" id="phone_number"
+                            placeholder="Phone Number">
+                            <input class="input-field" autocomplete="name" type="text" name="first_name" id="first_name"
+                            placeholder="First Name">
+                            <input class="input-field" autocomplete="name" type="text" name="last_name" id="last_name"
+                            placeholder="Last Name">
+                            <textarea class="input-field" autocomplete="address-level1" type="text" name="address" id="address"
+                            placeholder="Address" cols="20" rows="5"></textarea>
+                            <select class="input-field" name="country" id="country">
                             <option value="1">Pakistan</option>
-                        </select>
-                        <select class="input-field" name="state" id="state">
+                            </select>
+                            <select class="input-field" name="state" id="state">
                             <option value="1">Sindh</option>
-                        </select>
-                        <select class="input-field" name="city" id="City">
+                            </select>
+                            <select class="input-field" name="city" id="City">
                             <option value="1">Karachi</option>
-                        </select>
-                        <div class="payment-container">
+                            </select>
+                            <div class="payment-container">
                             <h4>Payment Method</h4>
                             <label class="payment-method">Cash on Delivery
-                                <input type="radio" checked='checked' name="payment_method" id="cash_on_delivery" value="cash_on_delivery">
-                                <span class="radio-btn"></span>
+                            <input type="radio" checked='checked' name="payment_method" id="cash_on_delivery"
+                            value="cash_on_delivery">
+                            <span class="radio-btn"></span>
                             </label>
-                        </div> *@
+                            </div> *@
                         @if (Model.UserDetails.IsNewGuestUser ?? false)
                         {
                             <div class="checkout-name-email-container">
@@ -120,8 +150,10 @@
                                 </span>
                             </div>
 
-                            <input asp-for='UserDetails.FirstName' class="input-field" type="text" id="first_name" name="first_name" placeholder="First Name"  />
-                            <input asp-for='UserDetails.LastName' class="input-field" type="text" id="last_name" name="last_name" placeholder="Last Name" />
+                            <input asp-for='UserDetails.FirstName' class="input-field" type="text" id="first_name" name="first_name"
+                    placeholder="First Name" />
+                            <input asp-for='UserDetails.LastName' class="input-field" type="text" id="last_name" name="last_name"
+                    placeholder="Last Name" />
                         }
                         else
                         {
@@ -134,27 +166,34 @@
                                 </span>
                             </div>
                         }
-                        
-                        @* <input asp-for='UserDetails.Email' disabled class="input-field" autocomplete="email"  type="email" name="email" id="email" placeholder="Email Address"> *@
 
-                        <input asp-for='UserDetails.ContactNumber' class="input-field" autocomplete="mobile"  type="text" name="phone_number" id="phone_number" placeholder="Phone Number">
-                        
-                        <textarea asp-for='UserDetails.Address' class="input-field" autocomplete="address-level1" type="text" name="address" id="address" placeholder="Address" cols="20" rows="5"></textarea>
-                        
-                        <select asp-for='UserDetails.CountryId' class="input-field" name="country" id="country" asp-items="Model.UserDetails.Countries">
+                        @* <input asp-for='UserDetails.Email' disabled class="input-field" autocomplete="email" type="email"
+                            name="email" id="email" placeholder="Email Address"> *@
+
+                        <input asp-for='UserDetails.ContactNumber' class="input-field" autocomplete="mobile" type="text"
+                    name="phone_number" id="phone_number" placeholder="Phone Number">
+
+                        <textarea asp-for='UserDetails.Address' class="input-field" autocomplete="address-level1" type="text"
+                    name="address" id="address" placeholder="Address" cols="20" rows="5"></textarea>
+
+                        <select asp-for='UserDetails.CountryId' class="input-field" name="country" id="country"
+                    asp-items="Model.UserDetails.Countries">
                             <option disabled selected>Country</option>
                         </select>
-                        <select class="input-field" name="state" id="state" asp-for="UserDetails.StateId" asp-items="Model.UserDetails.States">
+                        <select class="input-field" name="state" id="state" asp-for="UserDetails.StateId"
+                    asp-items="Model.UserDetails.States">
                             <option disabled selected>State</option>
                         </select>
-                        <select class="input-field" name="city" id="City" asp-for="UserDetails.CityId" asp-items="Model.UserDetails.Cities">
+                        <select class="input-field" name="city" id="City" asp-for="UserDetails.CityId"
+                    asp-items="Model.UserDetails.Cities">
                             <option disabled selected>City</option>
                         </select>
 
                         <div class="payment-container">
                             <h4>Payment Method</h4>
                             <label class="payment-method">Cash on Delivery
-                                <input type="radio" checked='checked' name="payment_method" id="cash_on_delivery" value="cash_on_delivery">
+                                <input type="radio" checked='checked' name="payment_method" id="cash_on_delivery"
+                            value="cash_on_delivery">
                                 <span class="radio-btn"></span>
                             </label>
                             <label class="payment-method">Credit Card
@@ -169,29 +208,31 @@
                     </form>
 
                 }
-                else{
+                else
+                {
                     <form asp-action='CheckGuestUser' class="user-guest-email">
-                        <input class="input-field" autocomplete="email" type="email" name="email" id="email" placeholder="Email Address">
-                        <button class="primary-button" type="submit" >Continue as Guest</button>
+                        <input class="input-field" autocomplete="email" type="email" name="email" id="email"
+                    placeholder="Email Address">
+                        <button class="primary-button" type="submit">Continue as Guest</button>
                     </form>
                 }
-            
+
                 @await Html.PartialAsync("_LoginForm", null, new ViewDataDictionary(ViewData){{"isCheckOutForm", true}})
             }
         </div>
         <div class="cart-summary-section">
             <h3>Cart Summary</h3>
-            
+
             @await Html.PartialAsync("_CartItem")
-            @* @await Html.PartialAsync("_CartItem") *@
-            
+            @await Html.PartialAsync("_CartItem")
+
             <div class="cart-summary-total-container">
                 <h3>Total</h3>
                 <h3 class="cart-summary-total-price">PKR 3299</h3>
             </div>
             <button type="submit" class="primary-button">Place Order</button>
-            
-            <label class="save-info-checkbox" >
+
+            <label class="save-info-checkbox">
                 <input type="checkbox" name="save_info" id="save_info">
                 Save this information for next time
                 <span class="checkbox"></span>
@@ -200,19 +241,19 @@
     </div>
 </div>
 
- <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        if($('.user-info-section').children()[0].classList.contains('logged-in')){
+        if ($('.user-info-section').children()[0].classList.contains('logged-in')) {
             $('.logged-in').show();
         }
-        else{
-            if($('#login').hasClass('active')){
+        else {
+            if ($('#login').hasClass('active')) {
                 $('.user-details-fields').hide();
                 $('.logged-in').show();
                 $('.user-guest-email').hide();
             }
-            else{
+            else {
                 $('.user-details-fields').show();
                 $('.logged-in').hide();
                 $('.login-container').hide();
@@ -222,23 +263,23 @@
         $('.login-type-selector span').click(function () {
             $('.login-type-selector span').removeClass('active');
             $(this).addClass('active');
-            if($(this).attr('id') !== 'login'){
+            if ($(this).attr('id') !== 'login') {
                 $('.login-container').hide()
                 $('.user-details-fields').show();
-                $('.user-guest-email').show() 
+                $('.user-guest-email').show()
             }
-            else{
+            else {
                 $('.login-container').show()
                 $('.user-details-fields').hide();
                 $('.user-guest-email').hide()
             }
         });
 
-        @* $('.primary-button').click(function(e){
-            if($(this).attr('id') === 'login') return
-            e.preventDefault();
-            $('.user-guest-email').hide();
-            $('.user-details-fields').show();
+    @* $('.primary-button').click(function(e){
+        if($(this).attr('id') === 'login') return
+        e.preventDefault();
+        $('.user-guest-email').hide();
+        $('.user-details-fields').show();
         }); *@
     });
 </script>

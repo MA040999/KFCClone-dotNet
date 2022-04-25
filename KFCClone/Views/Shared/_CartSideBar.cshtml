@@ -5,24 +5,32 @@
         <h2>Cart</h2>
     </div>
     <div class="sidebar-body">
-        
-        
+
+
         @await Html.PartialAsync("_CartItem")
-        
-        
+        @await Html.PartialAsync("_CartItem")
+        @await Html.PartialAsync("_CartItem")
+
+
     </div>
     <div class="sidebar-footer">
-        <div class="sidebar-icon-person">
-            
+        <div class="cart-summary-total-container">
+            <h3>Total</h3>
+            <h3 class="cart-summary-total-price">PKR 3299</h3>
         </div>
-        @* <h3>{name}</h3> *@
+        <button type="submit" class="primary-button">Checkout</button>
     </div>
 </div>
 
- <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        $(document).on("click", '.cart-btn', function(event) {
+        $(document).on("click", '.cart-btn', function (event) {
+            $(".sidebar-container").toggleClass("hide");
+            $(".sidebar-content").toggleClass("float-in");
+        });
+
+        $(document).on("click", '.sidebar-container', function (event) {
             $(".sidebar-container").toggleClass("hide");
             $(".sidebar-content").toggleClass("float-in");
         });

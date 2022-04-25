@@ -90,7 +90,7 @@
 .cart-summary-item-total-price {
   font-size: clamp(1.4em, 2vw, 2em);
   white-space: nowrap;
-}
+} */
 
 .cart-summary-total-container {
   display: flex;
@@ -101,7 +101,7 @@
 }
 .cart-summary-total-price {
   color: var(--red);
-} */
+}
 
 .payment-container {
   width: calc(100% - 2em);
