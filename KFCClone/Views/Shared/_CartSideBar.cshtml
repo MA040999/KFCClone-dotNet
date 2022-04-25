@@ -1,3 +1,15 @@
+<style>
+    .checkout-btn {
+        text-decoration: none;
+        color: var(--white);
+        text-align: center;
+    }
+
+    .checkout-btn:hover {
+        text-decoration: none;
+        color: var(--white);
+    }
+</style>
 <div class="sidebar-container hide"></div>
 
 <div class="sidebar-content">
@@ -7,9 +19,9 @@
     <div class="sidebar-body">
 
 
-        @await Html.PartialAsync("_CartItem")
-        @await Html.PartialAsync("_CartItem")
-        @await Html.PartialAsync("_CartItem")
+        @await Html.PartialAsync("_CartItem", null, new ViewDataDictionary(ViewData){ {"IsSideBarItem", true} })
+        @await Html.PartialAsync("_CartItem", null, new ViewDataDictionary(ViewData){ {"IsSideBarItem", true} })
+        @await Html.PartialAsync("_CartItem", null, new ViewDataDictionary(ViewData){ {"IsSideBarItem", true} })
 
 
     </div>
@@ -18,7 +30,9 @@
             <h3>Total</h3>
             <h3 class="cart-summary-total-price">PKR 3299</h3>
         </div>
-        <button type="submit" class="primary-button">Checkout</button>
+        <a class="primary-button checkout-btn" asp-area="" asp-controller="Checkout" asp-action="Index">
+            Checkout
+        </a>
     </div>
 </div>
 

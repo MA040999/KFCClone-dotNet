@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,8 @@
     @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>*@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/KFCClone.styles.css" asp-append-version="true" />
 
@@ -20,7 +22,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -49,6 +51,7 @@
             border-radius: 21px;
             color: var(--white);
         }
+
         .cart-btn {
             background-color: var(--red);
             border-radius: 21px;
@@ -68,12 +71,12 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <nav class="navbar-container">
             <a asp-area="" asp-controller="Home" asp-action="Index">
-                <img class='logo' src="~/Images/KFC_logo.png"
-                     alt="KFC Logo" />
+                <img class='logo' src="~/Images/KFC_logo.png" alt="KFC Logo" />
             </a>
             @if (@User.Identity!.IsAuthenticated)
             {
@@ -86,51 +89,53 @@
                     </a>
                 </div>
             }
-            else 
+            else
             {
                 <a class='login-link-btn' asp-area="" asp-controller="Auth" asp-action="Login">
                     Sign in / Register
                 </a>
             }
-            
+
         </nav>
     </header>
     <div class="body-content-container">
         <div class='category-container'>
             @* <div class='category-item category-item-selected'>
                 Everyday Value
-            </div>
-            <div class='category-item'>
-                Make it a Meal
-            </div>
-            
-            <div class='category-item'>
-                Everyday Value
-            </div> *@
-            @* @foreach (var item in Model)
-            {
-                <div class='category-item'>
-                   @Html.DisplayFor(modelItem => item.CategoryName)
                 </div>
-            } *@
-            
-            
+                <div class='category-item'>
+                Make it a Meal
+                </div>
+
+                <div class='category-item'>
+                Everyday Value
+                </div> *@
+            @* @foreach (var item in Model)
+                {
+                <div class='category-item'>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+                </div>
+                } *@
+
+
         </div>
         <main role="main">
-            @await Html.PartialAsync("_CartSideBar");
+            @await Html.PartialAsync("_CartSideBar")
             @RenderBody()
         </main>
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $.ajax({
                 type: 'GET',
                 url: '/Category/GetCategories',
-                success: function(data) {
-                    $.each(data, function(key, item){
+                success: function (data) {
+                    $.each(data, function (key, item) {
                         $(".category-container").append(
                             `<a href="/Category/${item.id}" class='category-item'>
                                 ${item.categoryName}
@@ -138,7 +143,7 @@
                         );
                     })
                 },
-                complete: function(){
+                complete: function () {
                     $(".category-container").append(
                         `<div class='cart-btn'>
                             <span>
@@ -154,4 +159,5 @@
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

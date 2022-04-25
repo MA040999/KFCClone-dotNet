@@ -14,4 +14,13 @@
         </div>
 
     </div>
+    @if (ViewData["IsSideBarItem"] is bool)
+    {
+        <div class="cart-counter-crash-container">
+            @await Html.PartialAsync("_Counter")
+            <div class="trash-container">
+                <ion-icon name="trash-outline"></ion-icon>
+            </div>
+        </div>
+    }
 </div>

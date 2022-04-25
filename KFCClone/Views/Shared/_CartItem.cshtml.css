@@ -1,6 +1,7 @@
 .cart-summary-item-container {
   display: flex;
   justify-content: space-around;
+  flex-direction: column;
   width: 95%;
   background-color: var(--light-black);
   border-radius: 26px;
@@ -17,6 +18,10 @@
 .cart-summary-name {
   flex-grow: 1;
 }
+h4.cart-summary-name {
+  font-size: clamp(0.65em, 3vw, 1em);
+}
+
 .cart-summary-item-container img {
   width: min(18vw, 100px);
   height: min(18vw, 100px);
@@ -37,9 +42,31 @@
 }
 .cart-summary-item-price {
   color: var(--red);
-  font-weight: 600;
+  font-weight: 800;
 }
 .cart-summary-item-total-price {
   font-size: clamp(1.4em, 2vw, 2em);
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+}
+
+.cart-counter-crash-container {
+  display: flex;
+  justify-content: space-between;
+  width: 98%;
+  align-items: center;
+  gap: 1em;
+  margin-top: 1.5em;
+}
+
+.trash-container {
+  background-color: var(--red);
+  border-radius: 50%;
+  width: fit-content;
+  padding: 0.3em;
+  aspect-ratio: 1;
+  cursor: pointer;
+  font-size: clamp(2em, 2vw, 3em);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

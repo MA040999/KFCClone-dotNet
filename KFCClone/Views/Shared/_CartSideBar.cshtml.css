@@ -64,7 +64,7 @@
   padding: 0 0.5em;
   align-items: center;
   padding-block: 1.4em;
-  gap: 1em;
+  gap: 2em;
   font-size: clamp(0.9rem, 2vw, 1rem);
   overflow-y: auto;
 }
