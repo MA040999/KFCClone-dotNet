@@ -60,7 +60,7 @@ h4.cart-summary-name {
 
 .trash-container {
   background-color: var(--red);
-  border-radius: 50%;
+  border-radius: 30%;
   width: fit-content;
   padding: 0.3em;
   aspect-ratio: 1;

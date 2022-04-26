@@ -86,7 +86,7 @@
 
 .add-to-cart-container {
   background-color: var(--red);
-  border-radius: 50%;
+  border-radius: 30%;
   width: 50px;
   aspect-ratio: 1;
   display: flex;
