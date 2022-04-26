@@ -232,11 +232,9 @@
             </div>
             <button type="submit" class="primary-button">Place Order</button>
 
-            <label class="save-info-checkbox">
-                <input type="checkbox" name="save_info" id="save_info">
-                Save this information for next time
-                <span class="checkbox"></span>
-            </label>
+            @await Html.PartialAsync("_Checkbox", null, new ViewDataDictionary(ViewData){{"LabelText",
+            "Save this information for next time"}})
+
         </div>
     </div>
 </div>

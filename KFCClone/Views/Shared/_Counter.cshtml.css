@@ -1,9 +1,9 @@
 .counter-container {
   background-color: var(--black);
   border: 2px solid var(--border-grey);
-  border-radius: 1em;
+  border-radius: 0.9em;
   display: flex;
-  gap: 2em;
+  gap: clamp(1em, 2vw, 2em);
   width: fit-content;
   padding: 0.5em 0.6em;
   justify-content: center;
@@ -21,7 +21,7 @@
   aspect-ratio: 1;
   color: var(--black);
   cursor: pointer;
-  font-size: 1.5em;
+  font-size: clamp(1em, 2vw, 1.3em);
   font-weight: 900;
   text-align: center;
   margin: auto;

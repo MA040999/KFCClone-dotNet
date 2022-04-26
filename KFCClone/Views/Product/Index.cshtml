@@ -1,0 +1,70 @@
+﻿@model KFCClone.DTOs.Product.GetProductByIdResponseDto
+@{
+    ViewData["Title"] = "Product";
+}
+
+<div class="product-details-container">
+    <div class="product-details-image-section">
+        <img class="product-details-image" src="/Images/@Model.ProductImage" alt="@Model.ProductName">
+    </div>
+    <div class="product-details-content-section">
+        <h2>@Model.ProductName</h2>
+        <p>@Model.ProductDescription</p>
+        <div class="product-details-addon-container">
+            <h2>Select Drink</h2>
+            @foreach (var item in Model.ProductAddOns)
+            {
+                if (item.AddOn.IsDrink)
+                {
+                    <div class="addon-row">
+                        @await Html.PartialAsync("_Checkbox", null, new ViewDataDictionary(ViewData){{"LabelText",
+                @item.AddOn.Name}, {"AddOnClass", "addon-name"}})
+                        @* <p class="addon-name">@item.AddOn.Name</p> *@
+                        <p class="addon-price">PKR @item.AddOn.Price</p>
+                        @await Html.PartialAsync("_Counter")
+                    </div>
+                }
+            }
+        </div>
+        <div class="product-details-addon-container">
+            <h2>Add Ons</h2>
+            @foreach (var item in Model.ProductAddOns)
+            {
+                if (!item.AddOn.IsDrink && !item.AddOn.IsUpsize)
+                {
+                    <div class="addon-row">
+                        @await Html.PartialAsync("_Checkbox", null, new ViewDataDictionary(ViewData){{"LabelText",
+                @item.AddOn.Name}, {"AddOnClass", "addon-name"}})
+                        @* <p class="addon-name">@item.AddOn.Name</p> *@
+                        <p class="addon-price">PKR @item.AddOn.Price</p>
+                        @await Html.PartialAsync("_Counter")
+                    </div>
+                }
+            }
+        </div>
+        <div class="product-details-addon-container">
+            <h2>Upsize</h2>
+            @foreach (var item in Model.ProductAddOns)
+            {
+                if (item.AddOn.IsUpsize)
+                {
+                    <div class="addon-row">
+
+                        @await Html.PartialAsync("_Checkbox", null, new ViewDataDictionary(ViewData){{"LabelText",
+                @item.AddOn.Name}, {"AddOnClass", "addon-name"}})
+                        @* <p class="addon-name">@item.AddOn.Name</p> *@
+                        <p class="addon-price">PKR @item.AddOn.Price</p>
+                        @await Html.PartialAsync("_Counter")
+                    </div>
+                }
+            }
+        </div>
+        <h2 class="product-details-grand-total">PKR @Model.ProductPrice</h2>
+        <div class="product-details-footer">
+            @await Html.PartialAsync("_Counter")
+            <button class="primary-button">
+                Add to Cart
+            </button>
+        </div>
+    </div>
+</div>

@@ -7,6 +7,26 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 </head>
 
+<style>
+    .product-card {
+        width: 20%;
+        min-width: 250px;
+        background-color: var(--grey);
+        border-radius: 24px;
+        gap: 1.5em;
+        overflow: hidden;
+        display: flex;
+        text-decoration: none;
+        color: initial;
+        flex-direction: column;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 8px;
+    }
+
+    .product-card:hover {
+        color: initial;
+    }
+</style>
+
 <div class="homepage-container">
     <div class="carousel-container">
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
@@ -45,7 +65,7 @@
     <div class="products-container">
         @foreach (var item in Model)
         {
-            <a class="product-card" href="#">
+            <a asp-controller="Product" asp-action="Index" class="product-card" asp-route-productId="@item.Id">
                 <img src="/Images/@item.ProductImage" alt="@item.ProductName" />
                 <div class="product-card-content">
                     <h3>@item.ProductName</h3>

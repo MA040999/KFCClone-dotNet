@@ -17,7 +17,7 @@ namespace KFCClone.Data.Repositories
 
         public async Task<GetProductByIdResponseDto> GetProductById(int productId)
         {
-            Product product = await _context.Products.Include(x => x.ProductAddOns).ThenInclude(addon => addon.AddOn).SingleAsync(x => x.Id == productId);
+            Product? product = await _context.Products.Include(x => x.ProductAddOns).ThenInclude(addon => addon.AddOn).SingleOrDefaultAsync(x => x.Id == productId);
 
             if (product == null) throw new KeyNotFoundException("Product does not exist");
 
