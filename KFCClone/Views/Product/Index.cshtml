@@ -59,12 +59,51 @@
                 }
             }
         </div>
-        <h2 class="product-details-grand-total">PKR @Model.ProductPrice</h2>
+        <h2 class="product-details-grand-total" id="grand-total">PKR @Model.ProductPrice</h2>
         <div class="product-details-footer">
             @await Html.PartialAsync("_Counter")
-            <button class="primary-button">
+            <button id="addCartBtn" class="primary-button">
                 Add to Cart
             </button>
         </div>
     </div>
 </div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#addCartBtn').click(function () {
+            var cartItems = JSON.parse(localStorage.getItem('cart'));
+            console.log("cartItems", cartItems);
+            if (cartItems == null) {
+                cartItems = [];
+            }
+            cartItems.push({
+                id: @Model.Id,
+                name: "@Model.ProductName",
+                price: @Model.ProductPrice,
+                image: "@Model.ProductImage",
+                quantity: parseInt($('.product-details-footer #quantity').val()),
+            });
+            console.log("cartItems2222", cartItems);
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+        })
+        $(document).on("click", ".product-details-footer .minus", function () {
+            var $input = $(this).parent().find('#quantity');
+            var count = parseInt($input.val()) - 1;
+            count = count < 1 ? 1 : count;
+            $input.val(count);
+    @* $('#grand-total').attr('total-price', count * $('#grand-total').attr('total-price')); *@
+    @* $('#grand-total').text('PKR ' + count * $('#grand-total').text().split('PKR ')[1]); *@
+                $('#grand-total').text('PKR ' + count * @Model.ProductPrice);
+        })
+        $(document).on("click", ".product-details-footer .add", function () {
+            var $input = $(this).parent().find('#quantity');
+            var count = parseInt($input.val()) + 1;
+            $input.val(count);
+    @* $('#grand-total').text('PKR ' + count * parseInt($('#grand-total').text().split('PKR')[1].trim())); *@
+                $('#grand-total').text('PKR ' + count * @Model.ProductPrice);
+        })
+    })
+</script>

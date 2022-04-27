@@ -25,8 +25,22 @@
   font-weight: 900;
   text-align: center;
   margin: auto;
+  user-select: none;
 }
 
+.counter-value-input {
+  background: none;
+  /* width: 20px; */
+  text-align: center;
+  outline: none;
+  border: none;
+}
+input:disabled {
+  color: inherit;
+}
+.product-details-footer > .counter-container .counter-value-input {
+  font-size: 1.1em;
+}
 /* .add::after,
 .minus::after {
   content: "\002B";

@@ -9,6 +9,140 @@
         text-decoration: none;
         color: var(--white);
     }
+
+    /* CART ITEM STYLING START */
+
+    .cart-summary-item-container {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+        width: 95%;
+        background-color: var(--light-black);
+        border-radius: 26px;
+        border: 1px solid var(--border-grey);
+        padding: 1em;
+        font-size: clamp(0.65em, 3vw, 1em);
+    }
+
+    .cart-name-price-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 1em;
+        width: 100%;
+    }
+
+    .cart-summary-name {
+        flex-grow: 1;
+    }
+
+    h4.cart-summary-name {
+        font-size: clamp(0.65em, 3vw, 1em);
+    }
+
+    .cart-summary-item-container img {
+        width: min(18vw, 100px);
+        height: min(18vw, 100px);
+        border-radius: 16px;
+        object-fit: cover;
+        aspect-ratio: 1 / 1;
+    }
+
+    .cart-summary-item-img-content {
+        display: flex;
+        gap: 1em;
+        flex-grow: 2;
+    }
+
+    .cart-summary-item-info {
+        display: flex;
+        gap: 1em;
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .cart-summary-item-price {
+        color: var(--red);
+        font-weight: 800;
+    }
+
+    .cart-summary-item-total-price {
+        font-size: clamp(1.4em, 2vw, 2em);
+        overflow-wrap: anywhere;
+    }
+
+    .cart-counter-crash-container {
+        display: flex;
+        justify-content: space-between;
+        width: 98%;
+        align-items: center;
+        gap: 1em;
+        margin-top: 1.5em;
+    }
+
+    .trash-container {
+        background-color: var(--red);
+        border-radius: 30%;
+        width: fit-content;
+        padding: 0.3em;
+        aspect-ratio: 1;
+        cursor: pointer;
+        font-size: clamp(2em, 2vw, 3em);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* CART ITEM STYLING END */
+
+    /* CART ITEM COUNTER END */
+
+    .counter-container {
+        background-color: var(--black);
+        border: 2px solid var(--border-grey);
+        border-radius: 0.9em;
+        display: flex;
+        gap: clamp(1em, 2vw, 2em);
+        width: fit-content;
+        padding: 0.5em 0.6em;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .add,
+    .minus {
+        background-color: var(--white);
+        border-radius: 30%;
+        width: fit-content;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        aspect-ratio: 1;
+        color: var(--black);
+        cursor: pointer;
+        font-size: clamp(1em, 2vw, 1.3em);
+        font-weight: 900;
+        text-align: center;
+        margin: auto;
+        user-select: none;
+    }
+
+    .counter-value-input {
+        background: none;
+        text-align: center;
+        outline: none;
+        border: none;
+    }
+
+    input:disabled {
+        color: inherit;
+    }
+
+    .product-details-footer>.counter-container .counter-value-input {
+        font-size: 1.1em;
+    }
+
+
+    /* CART ITEM COUNTER END */
 </style>
 <div class="sidebar-container hide"></div>
 
@@ -18,17 +152,11 @@
     </div>
     <div class="sidebar-body">
 
-
-        @await Html.PartialAsync("_CartItem", null, new ViewDataDictionary(ViewData){ {"IsSideBarItem", true} })
-        @await Html.PartialAsync("_CartItem", null, new ViewDataDictionary(ViewData){ {"IsSideBarItem", true} })
-        @await Html.PartialAsync("_CartItem", null, new ViewDataDictionary(ViewData){ {"IsSideBarItem", true} })
-
-
     </div>
     <div class="sidebar-footer">
         <div class="cart-summary-total-container">
             <h3>Total</h3>
-            <h3 class="cart-summary-total-price">PKR 3299</h3>
+            <h3 class="cart-summary-total-price" id="cart-grand-total"></h3>
         </div>
         <a class="primary-button checkout-btn" asp-area="" asp-controller="Checkout" asp-action="Index">
             Checkout
@@ -39,7 +167,63 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
+
+        function calculateGrandTotal() {
+            var temp = 0;
+            var cartItems = localStorage.getItem("cart");
+            if (!cartItems) return `PKR 0`;
+
+            cartItems = JSON.parse(cartItems);
+            for (var i = 0; i < cartItems.length; i++) {
+                temp += (cartItems[i].price * cartItems[i].quantity);
+            }
+            return `PKR ${temp}`;
+        }
+
         $(document).on("click", '.cart-btn', function (event) {
+            var cartItems = localStorage.getItem("cart");
+            if (cartItems) {
+                cartItems = JSON.parse(cartItems);
+                var cartItemsHtml = "";
+
+                for (var i = 0; i < cartItems.length; i++) {
+                    @* cartItemsHtml += `@await Html.PartialAsync("_CartItem", null, new ViewDataDictionary(ViewData){ {"IsSideBarItem", true} })`; *@
+                        cartItemsHtml += `<div class="cart-summary-item-container">
+                                        <div class="cart-summary-item-img-content">
+                                            <img src="/Images/${cartItems[i].image}" alt="">
+                                            <div class="cart-summary-item-info">
+                                                <div class="cart-name-price-container">
+                                                    <h4 class="cart-summary-name">${cartItems[i].name}</h4>
+                                                    <h3 class="cart-summary-item-total-price" id="cart-item-total-${cartItems[i].id}">PKR ${cartItems[i].price * cartItems[i].quantity}</h3>
+                                                </div>
+                                                <p class="cart-summary-item-price" price="${cartItems[i].price}" id="cart-item-price-${cartItems[i].id}">PKR ${cartItems[i].price}</p>
+                                                <p>
+                                                    <b>Drink:</b> Pepsi <br>
+                                                    <b>Add Ons:</b> Fries (x1), Mayo Dip (x 1)
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                        <div class="cart-counter-crash-container">
+                                            <div class="counter-container" id="cart-item-counter">
+                                                <div class="minus">
+                                                    <ion-icon name="remove-outline"></ion-icon>
+                                                </div>
+                                                <input type="text" productId="${cartItems[i].id}" size='1' class="counter-value-input" id="quantity" value="${cartItems[i].quantity}" min="1" disabled>
+                                                <div class="add">
+                                                    <ion-icon name="add-outline"></ion-icon>
+                                                </div>
+                                            </div>
+                                            <div class="trash-container">
+                                                <ion-icon name="trash"></ion-icon>
+                                            </div>
+                                        </div>
+                                    </div>`;
+
+                }
+                $(".sidebar-body").append(cartItemsHtml);
+            }
+            $("#cart-grand-total").text(calculateGrandTotal());
             $(".sidebar-container").toggleClass("hide");
             $(".sidebar-content").toggleClass("float-in");
         });
@@ -47,6 +231,31 @@
         $(document).on("click", '.sidebar-container', function (event) {
             $(".sidebar-container").toggleClass("hide");
             $(".sidebar-content").toggleClass("float-in");
+            $(".sidebar-body").empty();
         });
+
+        $(document).on("click", "#cart-item-counter > .minus", function () {
+            var $input = $(this).parent().find('#quantity');
+            var productId = $input.attr("productId");
+            var count = parseInt($input.val()) - 1;
+            count = count < 1 ? 1 : count;
+            $input.val(count);
+            var price = parseInt($(`#cart-item-price-${productId}`).attr('price'));
+            $(`#cart-item-total-${productId}`).text('PKR ' + count * price);
+            if (count == 1) return
+            @* $("#cart-grand-total").text(`${parseInt($('#cart-grand-total').text()) - price}`); *@
+                $("#cart-grand-total").text(calculateGrandTotal());
+        })
+
+        $(document).on("click", "#cart-item-counter > .add", function () {
+            var $input = $(this).parent().find('#quantity');
+            var productId = $input.attr("productId");
+            var count = parseInt($input.val()) + 1;
+            $input.val(count);
+            var price = parseInt($(`#cart-item-price-${productId}`).attr('price'));
+            $(`#cart-item-total-${productId}`).text('PKR ' + count * price);
+            @* $("#cart-grand-total").text(`${parseInt($('#cart-grand-total').text()) + price}`); *@
+                $("#cart-grand-total").text(calculateGrandTotal());
+        })
     })
 </script>
