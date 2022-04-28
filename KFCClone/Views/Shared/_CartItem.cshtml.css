@@ -45,7 +45,7 @@ h4.cart-summary-name {
   font-weight: 800;
 }
 .cart-summary-item-total-price {
-  font-size: clamp(1.4em, 2vw, 2em);
+  font-size: clamp(1.3em, 2vw, 2em);
   overflow-wrap: anywhere;
 }
 

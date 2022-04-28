@@ -147,7 +147,7 @@
                     $(".category-container").append(
                         `<div class='cart-btn'>
                             <span>
-                                ${3}
+                                ${JSON.parse(localStorage.getItem('cart'))?.length || 0}
                             </span>
                             <img src='/Images/shopping-bag.svg' />
                         </div>`

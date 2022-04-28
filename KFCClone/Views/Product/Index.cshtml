@@ -59,7 +59,7 @@
                 }
             }
         </div>
-        <h2 class="product-details-grand-total" id="grand-total">PKR @Model.ProductPrice</h2>
+        <h2 class="product-details-grand-total" id="grand-total"></h2>
         <div class="product-details-footer">
             @await Html.PartialAsync("_Counter")
             <button id="addCartBtn" class="primary-button">
@@ -73,21 +73,33 @@
 
 <script>
     $(document).ready(function () {
+        var formatter = new Intl.NumberFormat(undefined, {
+            style: 'currency',
+            currency: 'PKR',
+            maximumFractionDigits: 0
+        });
+
+        $('#grand-total').text(formatter.format(@Model.ProductPrice));
+
         $('#addCartBtn').click(function () {
             var cartItems = JSON.parse(localStorage.getItem('cart'));
-            console.log("cartItems", cartItems);
+
             if (cartItems == null) {
                 cartItems = [];
             }
+
             cartItems.push({
                 id: @Model.Id,
                 name: "@Model.ProductName",
                 price: @Model.ProductPrice,
                 image: "@Model.ProductImage",
+                index: cartItems.length,
                 quantity: parseInt($('.product-details-footer #quantity').val()),
             });
-            console.log("cartItems2222", cartItems);
+
+
             localStorage.setItem('cart', JSON.stringify(cartItems));
+            $('.cart-btn').children().first().text(JSON.parse(localStorage.getItem('cart'))?.length || 0)
         })
         $(document).on("click", ".product-details-footer .minus", function () {
             var $input = $(this).parent().find('#quantity');
@@ -96,14 +108,14 @@
             $input.val(count);
     @* $('#grand-total').attr('total-price', count * $('#grand-total').attr('total-price')); *@
     @* $('#grand-total').text('PKR ' + count * $('#grand-total').text().split('PKR ')[1]); *@
-                $('#grand-total').text('PKR ' + count * @Model.ProductPrice);
+                $('#grand-total').text(formatter.format(count * @Model.ProductPrice));
         })
         $(document).on("click", ".product-details-footer .add", function () {
             var $input = $(this).parent().find('#quantity');
             var count = parseInt($input.val()) + 1;
             $input.val(count);
     @* $('#grand-total').text('PKR ' + count * parseInt($('#grand-total').text().split('PKR')[1].trim())); *@
-                $('#grand-total').text('PKR ' + count * @Model.ProductPrice);
+                $('#grand-total').text(formatter.format(count * @Model.ProductPrice));
         })
     })
 </script>

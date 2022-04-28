@@ -66,7 +66,7 @@
     }
 
     .cart-summary-item-total-price {
-        font-size: clamp(1.4em, 2vw, 2em);
+        font-size: clamp(1.3em, 2vw, 2em);
         overflow-wrap: anywhere;
     }
 
@@ -171,14 +171,20 @@
         function calculateGrandTotal() {
             var temp = 0;
             var cartItems = localStorage.getItem("cart");
-            if (!cartItems) return `PKR 0`;
+            if (!cartItems) return `${formatter.format(0)}`;
 
             cartItems = JSON.parse(cartItems);
             for (var i = 0; i < cartItems.length; i++) {
                 temp += (cartItems[i].price * cartItems[i].quantity);
             }
-            return `PKR ${temp}`;
+            return `${formatter.format(temp)}`;
         }
+
+        var formatter = new Intl.NumberFormat(undefined, {
+            style: 'currency',
+            currency: 'PKR',
+            maximumFractionDigits: 0
+        });
 
         $(document).on("click", '.cart-btn', function (event) {
             var cartItems = localStorage.getItem("cart");
@@ -190,13 +196,15 @@
                     @* cartItemsHtml += `@await Html.PartialAsync("_CartItem", null, new ViewDataDictionary(ViewData){ {"IsSideBarItem", true} })`; *@
                         cartItemsHtml += `<div class="cart-summary-item-container">
                                         <div class="cart-summary-item-img-content">
-                                            <img src="/Images/${cartItems[i].image}" alt="">
+                                            <img src="/Images/${cartItems[i].image}" alt="${cartItems[i].name}">
                                             <div class="cart-summary-item-info">
                                                 <div class="cart-name-price-container">
                                                     <h4 class="cart-summary-name">${cartItems[i].name}</h4>
-                                                    <h3 class="cart-summary-item-total-price" id="cart-item-total-${cartItems[i].id}">PKR ${cartItems[i].price * cartItems[i].quantity}</h3>
+                                                    <div class="trash-container" productId="${cartItems[i].id}" productIndex="${cartItems[i].index}" id='trash-btn'>
+                                                        <ion-icon name="trash"></ion-icon>
+                                                    </div>
                                                 </div>
-                                                <p class="cart-summary-item-price" price="${cartItems[i].price}" id="cart-item-price-${cartItems[i].id}">PKR ${cartItems[i].price}</p>
+                                                <p class="cart-summary-item-price" price="${cartItems[i].price}" id="cart-item-price-${cartItems[i].id}-${cartItems[i].index}">${formatter.format(cartItems[i].price)}</p>
                                                 <p>
                                                     <b>Drink:</b> Pepsi <br>
                                                     <b>Add Ons:</b> Fries (x1), Mayo Dip (x 1)
@@ -209,14 +217,12 @@
                                                 <div class="minus">
                                                     <ion-icon name="remove-outline"></ion-icon>
                                                 </div>
-                                                <input type="text" productId="${cartItems[i].id}" size='1' class="counter-value-input" id="quantity" value="${cartItems[i].quantity}" min="1" disabled>
+                                                <input type="text" productId="${cartItems[i].id}" productIndex="${cartItems[i].index}" size='1' class="counter-value-input" id="quantity" value="${cartItems[i].quantity}" min="1" disabled>
                                                 <div class="add">
                                                     <ion-icon name="add-outline"></ion-icon>
                                                 </div>
                                             </div>
-                                            <div class="trash-container">
-                                                <ion-icon name="trash"></ion-icon>
-                                            </div>
+                                            <h3 class="cart-summary-item-total-price" id="cart-item-total-${cartItems[i].id}-${cartItems[i].index}">${formatter.format(cartItems[i].price * cartItems[i].quantity)}</h3>
                                         </div>
                                     </div>`;
 
@@ -234,15 +240,44 @@
             $(".sidebar-body").empty();
         });
 
+        $(document).on("click", '#trash-btn', function (event) {
+            var productId = $(this).attr("productId");
+            var productIndex = $(this).attr("productIndex");
+            var cartItems = JSON.parse(localStorage.getItem('cart'));
+            var updatedCartItems = cartItems.filter(function (item) {
+                return item.id != productId || item.index != productIndex;
+            })
+            @* $(`#item-container[key=${productId}-${productIndex}]`).remove(); *@
+
+                $(this).parent().parent().parent().parent().remove();
+
+            localStorage.setItem('cart', JSON.stringify(updatedCartItems));
+
+            $('.cart-btn').children().first().text(JSON.parse(localStorage.getItem('cart'))?.length || 0)
+            $("#cart-grand-total").text(calculateGrandTotal());
+        });
+
         $(document).on("click", "#cart-item-counter > .minus", function () {
             var $input = $(this).parent().find('#quantity');
             var productId = $input.attr("productId");
+            var productIndex = $input.attr("productIndex");
             var count = parseInt($input.val()) - 1;
             count = count < 1 ? 1 : count;
             $input.val(count);
-            var price = parseInt($(`#cart-item-price-${productId}`).attr('price'));
-            $(`#cart-item-total-${productId}`).text('PKR ' + count * price);
-            if (count == 1) return
+            var price = parseInt($(`#cart-item-price-${productId}-${productIndex}`).attr('price'));
+            $(`#cart-item-total-${productId}-${productIndex}`).text(formatter.format(count * price));
+            var cartItems = JSON.parse(localStorage.getItem('cart'));
+
+            var updatedCartItems = cartItems.map(function (item) {
+                if (item.id == productId && item.index == productIndex) {
+                    item.quantity = count;
+                    return item
+                }
+                return item
+            })
+
+            localStorage.setItem('cart', JSON.stringify(updatedCartItems));
+
             @* $("#cart-grand-total").text(`${parseInt($('#cart-grand-total').text()) - price}`); *@
                 $("#cart-grand-total").text(calculateGrandTotal());
         })
@@ -250,11 +285,27 @@
         $(document).on("click", "#cart-item-counter > .add", function () {
             var $input = $(this).parent().find('#quantity');
             var productId = $input.attr("productId");
+            var productIndex = $input.attr("productIndex");
+
             var count = parseInt($input.val()) + 1;
             $input.val(count);
-            var price = parseInt($(`#cart-item-price-${productId}`).attr('price'));
-            $(`#cart-item-total-${productId}`).text('PKR ' + count * price);
+
+            var price = parseInt($(`#cart-item-price-${productId}-${productIndex}`).attr('price'));
+
+            $(`#cart-item-total-${productId}-${productIndex}`).text(formatter.format(count * price));
+            var cartItems = JSON.parse(localStorage.getItem('cart'));
+
+            var updatedCartItems = cartItems.map(function (item) {
+                if (item.id == productId && item.index == productIndex) {
+                    item.quantity = count;
+                    return item
+                }
+                return item
+            })
+
+            localStorage.setItem('cart', JSON.stringify(updatedCartItems));
             @* $("#cart-grand-total").text(`${parseInt($('#cart-grand-total').text()) + price}`); *@
+
                 $("#cart-grand-total").text(calculateGrandTotal());
         })
     })
