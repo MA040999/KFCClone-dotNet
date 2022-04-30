@@ -10,23 +10,87 @@
     <div class="product-details-content-section">
         <h2>@Model.ProductName</h2>
         <p>@Model.ProductDescription</p>
-        <div class="product-details-addon-container" id="drinks-container">
-            <h2>Select Drink</h2>
-            @foreach (var item in Model.ProductAddOns)
+
+        @if (Model.DrinkCount > 0)
+        {
+            for (int i = 0; i < Model.DrinkCount; i++)
             {
-                if (item.AddOn.IsDrink)
-                {
-                    <div class="addon-row" addOnId='@item.AddOnId'>
+                int index = 0;
+                <div class="product-details-addon-container" id="drinks-container">
+                    <h2>Select Drink</h2>
+                    @* ProductAddOn? item = Model.ProductAddOns.ElementAtOrDefault(i);
+                        <div class="addon-row" addOnId='@item!.AddOnId'>
                         @await Html.PartialAsync("_Checkbox", null, new ViewDataDictionary(ViewData){{"LabelText",
-                @item.AddOn.Name}, {"AddOnClass", "addon-name"}})
-                        @* <p class="addon-name">@item.AddOn.Name</p> *@
-                        <p class="addon-price" addOnPrice='@item.AddOn.Price'>PKR @item.AddOn.Price</p>
+                        @item!.AddOn.Name}, {"AddOnClass", "addon-name"}})
+
+                        <p class="addon-price" addOnPrice='@item!.AddOn.Price'>PKR @item!.AddOn.Price</p>
                         @await Html.PartialAsync("_Counter", null, new ViewDataDictionary(ViewData){{"AddOnId",
-                @item.AddOnId}})
-                    </div>
-                }
+                        @item!.AddOnId}})
+                        </div> *@
+
+                    @foreach (var item in Model.ProductAddOns)
+                    {
+                        if (item.AddOn.IsDrink)
+                        {
+                            <div class="addon-row">
+                                <label class="drink-radio-container">@item.AddOn.Name
+                                    <input type="radio" name="drinks_@i" value="@item.AddOnId" addOnName='@item.AddOn.Name'
+                        addOnPrice='0'>
+                                    <span class="radio-btn"></span>
+                                </label>
+
+                                @* <p class="addon-name">@item.AddOn.Name</p> *@
+
+                            </div>
+                        }
+                        index++;
+                    }
+                </div>
             }
-        </div>
+        }
+        else if (Model.IsMeal)
+        {
+            int index = 0;
+            <div class="product-details-addon-container" id="drinks-container">
+                <h2>Select Meal</h2>
+
+
+                @foreach (var item in Model.ProductAddOns)
+                {
+                    if (item.AddOn.IsDrink)
+                    {
+                        <div class="addon-row">
+                            <label class="drink-radio-container">@item.AddOn.Name
+                                <input type="radio" name="meals" id="meals" value="@item.AddOnId" addOnName='@item.AddOn.Name'
+                        addOnPrice='@item.AddOn.Price'>
+                                <span class="radio-btn"></span>
+                            </label>
+                        </div>
+                    }
+                    index++;
+                }
+            </div>
+        }
+        else
+        {
+            <div class="product-details-addon-container" id="drinks-container">
+                <h2>Add Drink</h2>
+                @foreach (var item in Model.ProductAddOns)
+                {
+                    if (item.AddOn.IsDrink)
+                    {
+                        <div class="addon-row" addOnId='@item.AddOnId'>
+                            @await Html.PartialAsync("_Checkbox", null, new ViewDataDictionary(ViewData){{"LabelText",
+                @item.AddOn.Name}, {"AddOnClass", "addon-name"}})
+                            @* <p class="addon-name">@item.AddOn.Name</p> *@
+                            <p class="addon-price" addOnPrice='@item.AddOn.Price'>PKR @item.AddOn.Price</p>
+                            @await Html.PartialAsync("_Counter", null, new ViewDataDictionary(ViewData){{"AddOnId",
+                @item.AddOnId}})
+                        </div>
+                    }
+                }
+            </div>
+        }
         <div class="product-details-addon-container" id="addons-container">
             <h2>Add Ons</h2>
             @foreach (var item in Model.ProductAddOns)
@@ -81,7 +145,11 @@
             maximumFractionDigits: 0
         });
 
+        $('input:radio').first().prop('checked', true);
+
         var total = @Model.ProductPrice;
+        var isMealAddOnPriceIncluded = false;
+        var previousMealAddOnPrice = 0;
 
         const setTotal = function () {
             $('#grand-total').text(formatter.format(total));
@@ -103,7 +171,35 @@
             setTotal();
 
         })
+
+        $(document).on('change', ".addon-row #meals", function () {
+            var addonPrice = parseInt($(this).attr('addOnPrice'));
+            console.log(addonPrice);
+            if (!isMealAddOnPriceIncluded) {
+                total += addonPrice;
+                previousMealAddOnPrice = addonPrice;
+                setTotal();
+                if (addonPrice > 0) {
+                    isMealAddOnPriceIncluded = true;
+                }
+                return
+            }
+            if (isMealAddOnPriceIncluded && addonPrice == 0) {
+                total -= previousMealAddOnPrice;
+                setTotal();
+                isMealAddOnPriceIncluded = false;
+
+            }
+        })
         $('#addCartBtn').click(function () {
+            if ($('.addon-row :radio:checked').length == 0 && @Model.DrinkCount == 1) {
+                alert('Please select a drink');
+                return;
+            }
+            if (($('.addon-row :radio:checked').length == 0 || $('.addon-row :radio:checked').length == 1) && @Model.DrinkCount == 2) {
+                alert('Please select drinks');
+                return;
+            }
             var cartItems = JSON.parse(localStorage.getItem('cart'));
 
             if (cartItems == null) {
@@ -113,6 +209,19 @@
             var drinks = []
             var addOns = []
             var upsize = []
+
+            $('.addon-row :radio:checked').each(function () {
+                var addonId = parseInt($(this).val());
+                var addonName = $(this).attr('addOnName');
+                var addonPrice = parseInt($(this).attr('addOnPrice'));
+                var addonCount = 1;
+                drinks.push({
+                    addonId,
+                    addonName,
+                    addonPrice,
+                    addonCount
+                });
+            })
 
             $('#drinks-container > .addon-row > .checkbox-container > :checkbox:checked').parents('.addon-row').each(function () {
                 var addonId = $(this).attr('addOnId');
@@ -167,7 +276,6 @@
             localStorage.setItem('cart', JSON.stringify(cartItems));
             $('.cart-btn').children().first().text(JSON.parse(localStorage.getItem('cart'))?.length || 0)
 
-            alert('Item added to cart');
         })
 
         $(document).on("click", ".addon-row .minus", function () {

@@ -62,6 +62,57 @@
   gap: 1.5em;
 }
 
+/* RADIO BUTTON STYLE */
+
+.drink-radio-container {
+  background-color: var(--black);
+  border-radius: 20px;
+  padding: 0.5em;
+  padding-left: 3em;
+  width: 400px;
+  max-width: 100%;
+  font-weight: 600;
+  color: var(--white);
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.drink-radio-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+.radio-btn {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 25px;
+  width: 25px;
+  border: 1px solid var(--border-grey);
+  border-radius: 50%;
+  overflow: hidden;
+}
+.drink-radio-container input:checked ~ .radio-btn::after {
+  display: block;
+}
+.radio-btn::after {
+  content: "";
+  position: absolute;
+  background-color: var(--border-grey);
+  width: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--black);
+  aspect-ratio: 1;
+  display: none;
+}
+
 .product-details-footer .primary-button {
   flex-grow: 0.4;
   margin: 0 auto;
