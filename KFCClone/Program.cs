@@ -31,7 +31,7 @@ builder.Services.AddTransient<ErrorHandlingMiddleware>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.ExpireTimeSpan = TimeSpan.FromHours(24);
         options.SlidingExpiration = true;
         options.AccessDeniedPath = "/Forbidden/";
         options.LoginPath = "/Auth/Login/";

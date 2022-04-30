@@ -168,6 +168,12 @@
 <script>
     $(document).ready(function () {
 
+        function calculateItemAddOnsTotalAmount(item) {
+            return item.drinks.reduce((a, b) => a + parseInt(b.addonPrice) * parseInt(b.addonCount), 0) +
+                item.addOns.reduce((a, b) => a + parseInt(b.addonPrice) * parseInt(b.addonCount), 0) +
+                item.upsize.reduce((a, b) => a + parseInt(b.addonPrice) * parseInt(b.addonCount), 0)
+        }
+
         function calculateGrandTotal() {
             var temp = 0;
             var cartItems = localStorage.getItem("cart");
@@ -175,7 +181,7 @@
 
             cartItems = JSON.parse(cartItems);
             for (var i = 0; i < cartItems.length; i++) {
-                temp += (cartItems[i].price * cartItems[i].quantity);
+                temp += (cartItems[i].price * cartItems[i].quantity) + calculateItemAddOnsTotalAmount(cartItems[i]);
             }
             return `${formatter.format(temp)}`;
         }
@@ -206,8 +212,10 @@
                                                 </div>
                                                 <p class="cart-summary-item-price" price="${cartItems[i].price}" id="cart-item-price-${cartItems[i].id}-${cartItems[i].index}">${formatter.format(cartItems[i].price)}</p>
                                                 <p>
-                                                    <b>Drink:</b> Pepsi <br>
-                                                    <b>Add Ons:</b> Fries (x1), Mayo Dip (x 1)
+                                                    <br>
+                                                    ${cartItems[i].drinks.length > 0 ? `<b>Drinks:</b> ${cartItems[i].drinks.map(addOn => `${addOn.addonName} (x${addOn.addonCount})`).join(", ")} <br>` : ''}
+                                                    ${cartItems[i].addOns.length > 0 ? `<b>Add Ons:</b> ${cartItems[i].addOns.map(addOn => `${addOn.addonName} (x${addOn.addonCount})`).join(", ")}` : ''}
+                                                    ${cartItems[i].upsize.length > 0 ? `<b>Upsize:</b> ${cartItems[i].upsize.map(addOn => `${addOn.addonName} (x${addOn.addonCount})`).join(", ")}` : ''}
                                                 </p>
                                             </div>
 
@@ -222,7 +230,7 @@
                                                     <ion-icon name="add-outline"></ion-icon>
                                                 </div>
                                             </div>
-                                            <h3 class="cart-summary-item-total-price" id="cart-item-total-${cartItems[i].id}-${cartItems[i].index}">${formatter.format(cartItems[i].price * cartItems[i].quantity)}</h3>
+                                            <h3 class="cart-summary-item-total-price" id="cart-item-total-${cartItems[i].id}-${cartItems[i].index}">${formatter.format((cartItems[i].price * cartItems[i].quantity) + calculateItemAddOnsTotalAmount(cartItems[i]))}</h3>
                                         </div>
                                     </div>`;
 
@@ -238,6 +246,13 @@
             $(".sidebar-container").toggleClass("hide");
             $(".sidebar-content").toggleClass("float-in");
             $(".sidebar-body").empty();
+        });
+        $(document).on("click", '.checkout-btn', function (e) {
+            var cartItems = JSON.parse(localStorage.getItem("cart"));
+            if (cartItems?.length === 0 || !cartItems) {
+                alert("Please add items in your cart to checkout");
+                e.preventDefault();
+            }
         });
 
         $(document).on("click", '#trash-btn', function (event) {
@@ -258,14 +273,23 @@
         });
 
         $(document).on("click", "#cart-item-counter > .minus", function () {
+
             var $input = $(this).parent().find('#quantity');
             var productId = $input.attr("productId");
             var productIndex = $input.attr("productIndex");
+            var cartItems = localStorage.getItem("cart");
+
+            cartItems = JSON.parse(cartItems);
+
+            var cartItem = cartItems.filter(function (item) {
+                return item.id == productId && item.index == productIndex;
+            })
+
             var count = parseInt($input.val()) - 1;
             count = count < 1 ? 1 : count;
             $input.val(count);
             var price = parseInt($(`#cart-item-price-${productId}-${productIndex}`).attr('price'));
-            $(`#cart-item-total-${productId}-${productIndex}`).text(formatter.format(count * price));
+            $(`#cart-item-total-${productId}-${productIndex}`).text(formatter.format((count * price) + calculateItemAddOnsTotalAmount(cartItem[0])));
             var cartItems = JSON.parse(localStorage.getItem('cart'));
 
             var updatedCartItems = cartItems.map(function (item) {
@@ -287,12 +311,20 @@
             var productId = $input.attr("productId");
             var productIndex = $input.attr("productIndex");
 
+            var cartItems = localStorage.getItem("cart");
+
+            cartItems = JSON.parse(cartItems);
+
+            var cartItem = cartItems.filter(function (item) {
+                return item.id == productId && item.index == productIndex;
+            })
+
             var count = parseInt($input.val()) + 1;
             $input.val(count);
 
             var price = parseInt($(`#cart-item-price-${productId}-${productIndex}`).attr('price'));
 
-            $(`#cart-item-total-${productId}-${productIndex}`).text(formatter.format(count * price));
+            $(`#cart-item-total-${productId}-${productIndex}`).text(formatter.format((count * price) + calculateItemAddOnsTotalAmount(cartItem[0])));
             var cartItems = JSON.parse(localStorage.getItem('cart'));
 
             var updatedCartItems = cartItems.map(function (item) {

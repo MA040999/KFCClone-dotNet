@@ -10,51 +10,53 @@
     <div class="product-details-content-section">
         <h2>@Model.ProductName</h2>
         <p>@Model.ProductDescription</p>
-        <div class="product-details-addon-container">
+        <div class="product-details-addon-container" id="drinks-container">
             <h2>Select Drink</h2>
             @foreach (var item in Model.ProductAddOns)
             {
                 if (item.AddOn.IsDrink)
                 {
-                    <div class="addon-row">
+                    <div class="addon-row" addOnId='@item.AddOnId'>
                         @await Html.PartialAsync("_Checkbox", null, new ViewDataDictionary(ViewData){{"LabelText",
                 @item.AddOn.Name}, {"AddOnClass", "addon-name"}})
                         @* <p class="addon-name">@item.AddOn.Name</p> *@
-                        <p class="addon-price">PKR @item.AddOn.Price</p>
-                        @await Html.PartialAsync("_Counter")
+                        <p class="addon-price" addOnPrice='@item.AddOn.Price'>PKR @item.AddOn.Price</p>
+                        @await Html.PartialAsync("_Counter", null, new ViewDataDictionary(ViewData){{"AddOnId",
+                @item.AddOnId}})
                     </div>
                 }
             }
         </div>
-        <div class="product-details-addon-container">
+        <div class="product-details-addon-container" id="addons-container">
             <h2>Add Ons</h2>
             @foreach (var item in Model.ProductAddOns)
             {
                 if (!item.AddOn.IsDrink && !item.AddOn.IsUpsize)
                 {
-                    <div class="addon-row">
+                    <div class="addon-row" addOnId='@item.AddOnId'>
                         @await Html.PartialAsync("_Checkbox", null, new ViewDataDictionary(ViewData){{"LabelText",
                 @item.AddOn.Name}, {"AddOnClass", "addon-name"}})
                         @* <p class="addon-name">@item.AddOn.Name</p> *@
-                        <p class="addon-price">PKR @item.AddOn.Price</p>
-                        @await Html.PartialAsync("_Counter")
+                        <p class="addon-price" addOnPrice='@item.AddOn.Price'>PKR @item.AddOn.Price</p>
+                        @await Html.PartialAsync("_Counter", null, new ViewDataDictionary(ViewData){{"AddOnId",
+                @item.AddOnId}})
                     </div>
                 }
             }
         </div>
-        <div class="product-details-addon-container">
+        <div class="product-details-addon-container" id="upsize-container">
             <h2>Upsize</h2>
             @foreach (var item in Model.ProductAddOns)
             {
                 if (item.AddOn.IsUpsize)
                 {
-                    <div class="addon-row">
-
+                    <div class="addon-row" addOnId='@item.AddOnId'>
                         @await Html.PartialAsync("_Checkbox", null, new ViewDataDictionary(ViewData){{"LabelText",
                 @item.AddOn.Name}, {"AddOnClass", "addon-name"}})
                         @* <p class="addon-name">@item.AddOn.Name</p> *@
-                        <p class="addon-price">PKR @item.AddOn.Price</p>
-                        @await Html.PartialAsync("_Counter")
+                        <p class="addon-price" addOnPrice='@item.AddOn.Price'>PKR @item.AddOn.Price</p>
+                        @await Html.PartialAsync("_Counter", null, new ViewDataDictionary(ViewData){{"AddOnId",
+                @item.AddOnId}})
                     </div>
                 }
             }
@@ -79,14 +81,75 @@
             maximumFractionDigits: 0
         });
 
-        $('#grand-total').text(formatter.format(@Model.ProductPrice));
+        var total = @Model.ProductPrice;
 
+        const setTotal = function () {
+            $('#grand-total').text(formatter.format(total));
+        }
+
+        setTotal();
+
+        $(document).on('click', ".addon-row > .checkbox-container > :checkbox", function () {
+            var addonId = $(this).parents('.addon-row').attr('addOnId');
+            var addonPrice = $(this).parents('.addon-row').find('.addon-price').attr('addOnPrice');
+            var addonCount = $(this).parents('.addon-row').find('.counter-container > input').val();
+
+            if ($(this)[0].checked) {
+                total += parseInt(addonPrice) * parseInt(addonCount);
+                setTotal();
+                return;
+            }
+            total -= parseInt(addonPrice) * parseInt(addonCount);
+            setTotal();
+
+        })
         $('#addCartBtn').click(function () {
             var cartItems = JSON.parse(localStorage.getItem('cart'));
 
             if (cartItems == null) {
                 cartItems = [];
             }
+
+            var drinks = []
+            var addOns = []
+            var upsize = []
+
+            $('#drinks-container > .addon-row > .checkbox-container > :checkbox:checked').parents('.addon-row').each(function () {
+                var addonId = $(this).attr('addOnId');
+                var addonName = $(this).find('.checkbox-container').text().trim();
+                var addonPrice = $(this).find('.addon-price').attr('addOnPrice');
+                var addonCount = $(this).find('.counter-container > input').val();
+                drinks.push({
+                    addonId,
+                    addonName,
+                    addonPrice,
+                    addonCount
+                })
+            })
+            $('#addons-container > .addon-row > .checkbox-container > :checkbox:checked').parents('.addon-row').each(function () {
+                var addonId = $(this).attr('addOnId');
+                var addonName = $(this).find('.checkbox-container').text().trim();
+                var addonPrice = $(this).find('.addon-price').attr('addOnPrice');
+                var addonCount = $(this).find('.counter-container > input').val();
+                addOns.push({
+                    addonId,
+                    addonName,
+                    addonPrice,
+                    addonCount
+                })
+            })
+            $('#upsize-container > .addon-row > .checkbox-container > :checkbox:checked').parents('.addon-row').each(function () {
+                var addonId = $(this).attr('addOnId');
+                var addonName = $(this).find('.checkbox-container').text().trim();
+                var addonPrice = $(this).find('.addon-price').attr('addOnPrice');
+                var addonCount = $(this).find('.counter-container > input').val();
+                upsize.push({
+                    addonId,
+                    addonName,
+                    addonPrice,
+                    addonCount
+                })
+            })
 
             cartItems.push({
                 id: @Model.Id,
@@ -95,27 +158,67 @@
                 image: "@Model.ProductImage",
                 index: cartItems.length,
                 quantity: parseInt($('.product-details-footer #quantity').val()),
+                drinks,
+                addOns,
+                upsize
             });
 
 
             localStorage.setItem('cart', JSON.stringify(cartItems));
             $('.cart-btn').children().first().text(JSON.parse(localStorage.getItem('cart'))?.length || 0)
+
+            alert('Item added to cart');
         })
+
+        $(document).on("click", ".addon-row .minus", function () {
+            var isChecked = $(this).parents('.addon-row').find('.checkbox-container > :checkbox')[0].checked;
+            if (!isChecked) return;
+
+            var $input = $(this).parent().find('#quantity');
+            var count = parseInt($input.val()) - 1;
+            if (count < 1) {
+                return
+            }
+            $input.val(count);
+
+            var addonPrice = $(this).parents('.addon-row').find('.addon-price').attr('addOnPrice');
+            total -= parseInt(addonPrice);
+            setTotal();
+        })
+
+        $(document).on("click", ".addon-row .add", function () {
+            var isChecked = $(this).parents('.addon-row').find('.checkbox-container > :checkbox')[0].checked;
+            if (!isChecked) return;
+
+            var $input = $(this).parent().find('#quantity');
+            var count = parseInt($input.val()) + 1;
+
+            $input.val(count);
+            var addonPrice = $(this).parents('.addon-row').find('.addon-price').attr('addOnPrice');
+            total += parseInt(addonPrice);
+            setTotal();
+        })
+
         $(document).on("click", ".product-details-footer .minus", function () {
             var $input = $(this).parent().find('#quantity');
             var count = parseInt($input.val()) - 1;
-            count = count < 1 ? 1 : count;
+
+            if (count < 1) {
+                return
+            }
+
             $input.val(count);
-    @* $('#grand-total').attr('total-price', count * $('#grand-total').attr('total-price')); *@
-    @* $('#grand-total').text('PKR ' + count * $('#grand-total').text().split('PKR ')[1]); *@
-                $('#grand-total').text(formatter.format(count * @Model.ProductPrice));
+            total -= @Model.ProductPrice;
+            setTotal();
         })
+
         $(document).on("click", ".product-details-footer .add", function () {
             var $input = $(this).parent().find('#quantity');
             var count = parseInt($input.val()) + 1;
             $input.val(count);
-    @* $('#grand-total').text('PKR ' + count * parseInt($('#grand-total').text().split('PKR')[1].trim())); *@
-                $('#grand-total').text(formatter.format(count * @Model.ProductPrice));
+            total += @Model.ProductPrice;
+
+            setTotal();
         })
     })
 </script>

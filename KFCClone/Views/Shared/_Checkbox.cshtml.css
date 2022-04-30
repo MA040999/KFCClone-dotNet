@@ -1,9 +1,9 @@
-.save-info-checkbox input {
+.checkbox-container input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
 }
-.save-info-checkbox {
+.checkbox-container {
   display: flex;
   /* gap: 1em; */
   align-items: center;
@@ -42,7 +42,7 @@
   -ms-transform: rotate(45deg) translate(-25%, -25%);
   transform: rotate(45deg) translate(-25%, -25%);
 }
-.save-info-checkbox input:checked ~ .checkbox:after {
+.checkbox-container input:checked ~ .checkbox:after {
   display: block;
 }
 
