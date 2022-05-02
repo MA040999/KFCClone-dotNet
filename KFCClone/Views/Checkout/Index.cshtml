@@ -92,15 +92,15 @@
                         <h4>Payment Method</h4>
                         <label class="payment-method">Cash on Delivery
                             <input type="radio" checked='checked' name="payment_method" id="cash_on_delivery"
-                            value="cash_on_delivery">
+                            value="CashOnDelivery">
                             <span class="radio-btn"></span>
                         </label>
                         <label class="payment-method">Credit Card
-                            <input type="radio" name="payment_method" id="credit_card" value="credit_card">
+                            <input type="radio" name="payment_method" id="credit_card" value="CreditCard">
                             <span class="radio-btn"></span>
                         </label>
                         <label class="payment-method">Debit Card
-                            <input type="radio" name="payment_method" id="debit_card" value="debit_card">
+                            <input type="radio" name="payment_method" id="debit_card" value="DebitCard">
                             <span class="radio-btn"></span>
                         </label>
                     </div>
@@ -138,7 +138,7 @@
                             <h4>Payment Method</h4>
                             <label class="payment-method">Cash on Delivery
                             <input type="radio" checked='checked' name="payment_method" id="cash_on_delivery"
-                            value="cash_on_delivery">
+                            value="CashOnDelivery">
                             <span class="radio-btn"></span>
                             </label>
                             </div> *@
@@ -193,15 +193,15 @@
                             <h4>Payment Method</h4>
                             <label class="payment-method">Cash on Delivery
                                 <input type="radio" checked='checked' name="payment_method" id="cash_on_delivery"
-                            value="cash_on_delivery">
+                            value="CashOnDelivery">
                                 <span class="radio-btn"></span>
                             </label>
                             <label class="payment-method">Credit Card
-                                <input type="radio" name="payment_method" id="credit_card" value="credit_card">
+                                <input type="radio" name="payment_method" id="credit_card" value="CreditCard">
                                 <span class="radio-btn"></span>
                             </label>
                             <label class="payment-method">Debit Card
-                                <input type="radio" name="payment_method" id="debit_card" value="debit_card">
+                                <input type="radio" name="payment_method" id="debit_card" value="DebitCard">
                                 <span class="radio-btn"></span>
                             </label>
                         </div>
@@ -210,29 +210,31 @@
                 }
                 else
                 {
-                    <form asp-action='CheckGuestUser' class="user-guest-email">
+                    <form asp-controller="Checkout" asp-action='CheckGuestUser' class="user-guest-email">
                         <input class="input-field" autocomplete="email" type="email" name="email" id="email"
                     placeholder="Email Address">
-                        <button class="primary-button" type="submit">Continue as Guest</button>
+                        <button asp-controller="Checkout" asp-action='CheckGuestUser' class="primary-button"
+                    type="submit">Continue as Guest</button>
                     </form>
                 }
 
                 @await Html.PartialAsync("_LoginForm", null, new ViewDataDictionary(ViewData){{"isCheckOutForm", true}})
             }
         </div>
-        <div class="cart-summary-section">
+        <form asp-controller="Checkout" asp-action='PlaceOrder' class="cart-summary-section">
             <h3>Cart Summary</h3>
 
             <div class="cart-summary-total-container">
                 <h3>Total</h3>
                 <h3 class="cart-summary-total-price">0</h3>
             </div>
-            <button type="submit" class="primary-button">Place Order</button>
+            <button asp-controller="Checkout" asp-action='PlaceOrder' type="submit" class="primary-button">Place
+                Order</button>
 
             @await Html.PartialAsync("_Checkbox", null, new ViewDataDictionary(ViewData){{"LabelText",
             "Save this information for next time"}})
 
-        </div>
+        </form>
     </div>
 </div>
 

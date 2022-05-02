@@ -45,5 +45,10 @@ namespace KFCClone.Data.Repositories
             return checkoutDto;
 
         }
+
+        public Task<CheckoutDto> PlaceOrderAsync(CheckoutDto checkoutDto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

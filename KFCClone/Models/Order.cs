@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using KFCClone.Enumerations;
 namespace KFCClone.Models
 {
     public partial class Order
@@ -16,6 +16,9 @@ namespace KFCClone.Models
 
         [Required(ErrorMessage = "Order Total is required")]
         public int OrderTotal { get; set; }
+
+        [Column("payment_type", TypeName = "nvarchar(max)")]
+        public PaymentType PaymentType { get; set; }
 
         [Required(ErrorMessage = "User ID is required")]
         [ForeignKey(nameof(User))]

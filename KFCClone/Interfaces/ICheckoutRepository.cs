@@ -7,6 +7,7 @@ namespace KFCClone.Interfaces
         Task<CheckoutDto> GetUserDetailsAsync(string email);
 
         // Task<CheckoutDto> CheckGuestUserAsync(string Email);
+        Task<CheckoutDto> PlaceOrderAsync(CheckoutDto checkoutDto);
 
     }
 }

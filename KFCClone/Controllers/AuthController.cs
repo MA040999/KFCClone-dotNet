@@ -113,9 +113,13 @@ namespace KFCClone.Controllers
                         return LocalRedirect(returnUrl);
                     }
 
+                    
                     return RedirectToAction("Index", "Home");
                 }
 
+                if(isCheckOutForm){
+                    return RedirectToAction("Index", "Checkout");
+                }
                 return View(requestBodyDto);
             }
             catch (Exception ex)

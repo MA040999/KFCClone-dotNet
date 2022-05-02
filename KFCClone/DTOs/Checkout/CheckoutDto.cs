@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using KFCClone.DTOs.Auth;
 using KFCClone.DTOs.Cart;
+using KFCClone.Enumerations;
 using KFCClone.Models;
 
 namespace KFCClone.DTOs.Checkout
@@ -17,11 +18,4 @@ namespace KFCClone.DTOs.Checkout
         public bool? RememberInfo { get; set; } = null;
         public bool? IsGuestUser { get; set; } = null;
     }
-}
-
-public enum PaymentType
-{
-    CashOnDelivery,
-    CreditCard,
-    DebitCard,
 }

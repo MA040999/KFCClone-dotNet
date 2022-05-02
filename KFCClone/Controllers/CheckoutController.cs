@@ -46,5 +46,18 @@ namespace KFCClone.Controllers
             ViewBag.IsGuestUser = true;
             return View("Index", checkoutDetails);
         }
+
+        [HttpPost]
+        [Route("Checout/PlaceOrder")]
+        [AllowAnonymous]
+        public async Task<IActionResult> PlaceOrder(CheckoutDto checkoutDto)
+        {
+            if (checkoutDto == null) return BadRequest();
+
+            // return Ok(await _auth.CheckGuestUserAsync(requestBodyDto.Email));
+
+
+            return Ok(await _checkoutRepository.PlaceOrderAsync(checkoutDto));
+        }
     }
 }

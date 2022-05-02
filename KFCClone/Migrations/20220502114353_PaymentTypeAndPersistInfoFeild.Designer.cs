@@ -4,6 +4,7 @@ using KFCClone.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KFCClone.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220502114353_PaymentTypeAndPersistInfoFeild")]
+    partial class PaymentTypeAndPersistInfoFeild
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,9 +135,8 @@ namespace KFCClone.Migrations
                         .HasColumnType("int")
                         .HasColumnName("order_total");
 
-                    b.Property<string>("PaymentType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                    b.Property<int>("PaymentType")
+                        .HasColumnType("int")
                         .HasColumnName("payment_type");
 
                     b.Property<int>("UserId")

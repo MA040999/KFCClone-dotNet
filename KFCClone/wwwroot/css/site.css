@@ -81,3 +81,31 @@
 .primary-button:active {
   transform: translateY(-3px);
 }
+
+.cart-summary-section {
+  background-color: var(--black);
+  /* height: 100%; */
+  border-top-left-radius: 50px;
+  gap: 2em;
+  padding: 1.5em 0;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  color: var(--white);
+  min-height: calc(100vh - var(--navbar-height) - 2.5em - 76px - 3em);
+}
+
+@media screen and (max-width: 1065px) {
+  .checkout-content {
+    flex-direction: column;
+    gap: 2em;
+  }
+  .checkout-content > * {
+    width: 100%;
+  }
+  .cart-summary-section {
+    border-top-right-radius: 30px;
+    border-top-left-radius: 30px;
+  }
+}

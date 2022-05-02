@@ -41,6 +41,8 @@ namespace KFCClone.Models
         [ForeignKey("CityId")]
         public int CityId { get; set; }
 
+        [Column("persist_info")]
+        public bool PersistInfo { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
     }
 }
