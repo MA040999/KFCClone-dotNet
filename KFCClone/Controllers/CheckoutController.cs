@@ -41,6 +41,8 @@ namespace KFCClone.Controllers
 
             // return Ok(await _auth.CheckGuestUserAsync(requestBodyDto.Email));
 
+            if(String.IsNullOrEmpty(requestBodyDto.Email)) return View("Index");
+            
             CheckoutDto checkoutDetails = await _checkoutRepository.GetUserDetailsAsync(requestBodyDto.Email);
 
             ViewBag.IsGuestUser = true;
@@ -48,15 +50,13 @@ namespace KFCClone.Controllers
         }
 
         [HttpPost]
-        [Route("Checout/PlaceOrder")]
+        [Route("Checkout/PlaceOrder")]
         [AllowAnonymous]
         public async Task<IActionResult> PlaceOrder(CheckoutDto checkoutDto)
         {
-            if (checkoutDto == null) return BadRequest();
-
-            // return Ok(await _auth.CheckGuestUserAsync(requestBodyDto.Email));
-
-
+            if(!ModelState.IsValid) return BadRequest(ModelState);
+            if (checkoutDto == null) throw new ApplicationException("Request body cannot be empty");
+            
             return Ok(await _checkoutRepository.PlaceOrderAsync(checkoutDto));
         }
     }

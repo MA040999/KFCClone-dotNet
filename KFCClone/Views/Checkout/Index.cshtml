@@ -12,7 +12,7 @@
             flex-direction: column;
             gap: 2em;
             width: 70%;
-            margin: auto 0;
+            margin-top: 2em;
             padding: 2em 0;
         }
 
@@ -55,10 +55,10 @@
             {
                 <form class="user-details-fields logged-in">
                     <div class="checkout-name-email-container">
-                        <span class="checkout-name">
+                        <span class="checkout-name" id="checkout-name">
                             @User.Identity!.Name!.Split(' ')[0] @User.Identity!.Name!.Split(' ')[1]
                         </span>
-                        <span>
+                        <span id="checkout-email">
                             @Model.UserDetails.Email
                         </span>
                         @* <input asp-for='UserDetails.Email' disabled class="input-field" autocomplete="email" type="email"
@@ -145,7 +145,7 @@
                         @if (Model.UserDetails.IsNewGuestUser ?? false)
                         {
                             <div class="checkout-name-email-container">
-                                <span class="checkout-name">
+                                <span class="checkout-name" id="checkout-email">
                                     @Model.UserDetails.Email
                                 </span>
                             </div>
@@ -158,10 +158,10 @@
                         else
                         {
                             <div class="checkout-name-email-container">
-                                <span class="checkout-name">
+                                <span class="checkout-name" id="checkout-name">
                                     @Model.UserDetails.FirstName @Model.UserDetails.LastName
                                 </span>
-                                <span>
+                                <span id="checkout-email">
                                     @Model.UserDetails.Email
                                 </span>
                             </div>
@@ -221,20 +221,20 @@
                 @await Html.PartialAsync("_LoginForm", null, new ViewDataDictionary(ViewData){{"isCheckOutForm", true}})
             }
         </div>
-        <form asp-controller="Checkout" asp-action='PlaceOrder' class="cart-summary-section">
+        <div class="cart-summary-section">
             <h3>Cart Summary</h3>
 
             <div class="cart-summary-total-container">
                 <h3>Total</h3>
                 <h3 class="cart-summary-total-price">0</h3>
             </div>
-            <button asp-controller="Checkout" asp-action='PlaceOrder' type="submit" class="primary-button">Place
+            <button id="place-order-btn" type="submit" class="primary-button">Place
                 Order</button>
 
             @await Html.PartialAsync("_Checkbox", null, new ViewDataDictionary(ViewData){{"LabelText",
             "Save this information for next time"}})
 
-        </form>
+        </div>
     </div>
 </div>
 
@@ -264,6 +264,59 @@
             }
             return `${formatter.format(temp)}`;
         }
+
+        $("#place-order-btn").click(function () {
+            var cartItems = JSON.parse(localStorage.getItem("cart"));
+            var tempTotal = 0;
+            var cartItems = localStorage.getItem("cart");
+            if (!cartItems) return 0;
+
+            cartItems = JSON.parse(cartItems);
+            for (var i = 0; i < cartItems.length; i++) {
+                tempTotal += (cartItems[i].price * cartItems[i].quantity) + calculateItemAddOnsTotalAmount(cartItems[i]);
+            }
+
+            var IsGuestUser = "@ViewBag.IsGuestUser";
+            var checkoutDto = {
+                Products: cartItems,
+                UserDetails: {
+                    FirstName: $('#first_name').val() || $("#checkout-name").text().trim().split(" ")[0],
+                    LastName: $('#last_name').val() || $("#checkout-name").text().trim().split(" ")[1],
+                    Email: $("#checkout-email").text().trim(),
+                    ContactNumber: $("#phone_number").val(),
+                    Address: $("#address").val(),
+                    CountryId: parseInt($("#country").val()),
+                    StateId: parseInt($("#state").val()),
+                    CityId: parseInt($("#City").val())
+                },
+                PaymentType: $('input[name=payment_method]:checked').val(),
+                GrandTotal: tempTotal,
+                RememberInfo: $('#save_info').is(':checked'),
+                IsGuestUser: IsGuestUser === "True" ? true : false
+            };
+
+            $.ajax({
+                url: '/Checkout/PlaceOrder',
+                type: 'POST',
+                data: { checkoutDto: checkoutDto },
+                success: function (data) {
+                    if (data.success) {
+                        localStorage.removeItem("cart");
+                        window.location.href = '/Home';
+                    }
+                    else {
+                        alert("Something went wrong. Please try again.");
+                    }
+                },
+                error: function (data) {
+                    if (data.status == 500) {
+                        alert("Something went wrong. Please try again.");
+                        return;
+                    }
+                    alert(data.responseJSON[Object.keys(data.responseJSON)[0]]);
+                }
+            });
+        })
 
         $(".cart-summary-total-price").text(calculateGrandTotal());
         var cartItems = localStorage.getItem("cart");
