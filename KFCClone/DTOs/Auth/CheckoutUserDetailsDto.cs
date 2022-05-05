@@ -34,8 +34,6 @@ namespace KFCClone.DTOs.Auth
 
         public SelectList? Cities { get; set; }
 
-        public bool? IsNewGuestUser { get; set; }
-        
         [RegularExpression(@"^((\+92)?(0092)?(92)?(0)?)(3)([0-9]{9})$", ErrorMessage = "Please enter a valid mobile number")]
         [Required(ErrorMessage = "Contact Number is required")]
         public string ContactNumber { get; set; } = null!;

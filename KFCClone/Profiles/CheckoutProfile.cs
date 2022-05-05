@@ -10,6 +10,7 @@ namespace KFCClone.Profiles
         public CheckoutProfile()
         {
             CreateMap<User, CheckoutUserDetailsDto>();
+            CreateMap<CheckoutUserDetailsDto, User>().ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FirstName + " " + src.LastName));
         }
     }
 }

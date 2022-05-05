@@ -61,12 +61,6 @@
                         <span id="checkout-email">
                             @Model.UserDetails.Email
                         </span>
-                        @* <input asp-for='UserDetails.Email' disabled class="input-field" autocomplete="email" type="email"
-                            name="email" id="email" placeholder="Email Address">
-                            <input asp-for='UserDetails.FirstName' class="input-field" disabled type="text" id="first_name"
-                            name="first_name" value="@User.Identity!.Name!.Split(' ')[0]" />
-                            <input asp-for='UserDetails.LastName' class="input-field" disabled type="text" id="last_name"
-                            name="last_name" value="@User.Identity!.Name!.Split(' ')[1]" /> *@
                     </div>
 
                     <input asp-for='UserDetails.ContactNumber' class="input-field" autocomplete="mobile" type="text"
@@ -109,114 +103,58 @@
             else
             {
                 <div class="login-type-selector">
-                    <span id="login" class="@(ViewBag.IsGuestUser ?? false ? "" : "active")">Login</span>
-                    <span id="guest_user" class="@(ViewBag.IsGuestUser ?? false ? "active" : "" )">Guest User</span>
+                    <span id="login" class="active">Login</span>
+                    <span id="guest_user">Guest User</span>
                 </div>
-                @if (ViewBag.IsGuestUser ?? false)
-                {
-                    <form class="user-details-fields">
-                        @* <input class="input-field" autocomplete="email" type="email" name="email" id="email"
-                            placeholder="Email Address">
-                            <input class="input-field" autocomplete="mobile" type="text" name="phone_number" id="phone_number"
-                            placeholder="Phone Number">
-                            <input class="input-field" autocomplete="name" type="text" name="first_name" id="first_name"
-                            placeholder="First Name">
-                            <input class="input-field" autocomplete="name" type="text" name="last_name" id="last_name"
-                            placeholder="Last Name">
-                            <textarea class="input-field" autocomplete="address-level1" type="text" name="address" id="address"
-                            placeholder="Address" cols="20" rows="5"></textarea>
-                            <select class="input-field" name="country" id="country">
-                            <option value="1">Pakistan</option>
-                            </select>
-                            <select class="input-field" name="state" id="state">
-                            <option value="1">Sindh</option>
-                            </select>
-                            <select class="input-field" name="city" id="City">
-                            <option value="1">Karachi</option>
-                            </select>
-                            <div class="payment-container">
-                            <h4>Payment Method</h4>
-                            <label class="payment-method">Cash on Delivery
+                @* @if (ViewBag.IsGuestUser ?? false) *@
+                @* { *@
+                <form class="user-details-fields">
+
+                    <input asp-for="UserDetails.Email" class="input-field" autocomplete="email" type="email" name="email"
+                    id="email" placeholder="Email Address">
+
+                    <input asp-for='UserDetails.ContactNumber' class="input-field" autocomplete="mobile" type="text"
+                    name="phone_number" id="phone_number" placeholder="Phone Number">
+
+                    <input asp-for='UserDetails.FirstName' class="input-field" type="text" id="first_name" name="first_name"
+                    placeholder="First Name" />
+                    <input asp-for='UserDetails.LastName' class="input-field" type="text" id="last_name" name="last_name"
+                    placeholder="Last Name" />
+
+
+                    <textarea asp-for='UserDetails.Address' class="input-field" autocomplete="address-level1" type="text"
+                    name="address" id="address" placeholder="Address" cols="20" rows="5"></textarea>
+
+                    <select asp-for='UserDetails.CountryId' class="input-field" name="country" id="country"
+                    asp-items="Model.UserDetails.Countries">
+                        <option disabled selected>Country</option>
+                    </select>
+                    <select class="input-field" name="state" id="state" asp-for="UserDetails.StateId"
+                    asp-items="Model.UserDetails.States">
+                        <option disabled selected>State</option>
+                    </select>
+                    <select class="input-field" name="city" id="City" asp-for="UserDetails.CityId"
+                    asp-items="Model.UserDetails.Cities">
+                        <option disabled selected>City</option>
+                    </select>
+
+                    <div class="payment-container">
+                        <h4>Payment Method</h4>
+                        <label class="payment-method">Cash on Delivery
                             <input type="radio" checked='checked' name="payment_method" id="cash_on_delivery"
                             value="CashOnDelivery">
                             <span class="radio-btn"></span>
-                            </label>
-                            </div> *@
-                        @if (Model.UserDetails.IsNewGuestUser ?? false)
-                        {
-                            <div class="checkout-name-email-container">
-                                <span class="checkout-name" id="checkout-email">
-                                    @Model.UserDetails.Email
-                                </span>
-                            </div>
-
-                            <input asp-for='UserDetails.FirstName' class="input-field" type="text" id="first_name" name="first_name"
-                    placeholder="First Name" />
-                            <input asp-for='UserDetails.LastName' class="input-field" type="text" id="last_name" name="last_name"
-                    placeholder="Last Name" />
-                        }
-                        else
-                        {
-                            <div class="checkout-name-email-container">
-                                <span class="checkout-name" id="checkout-name">
-                                    @Model.UserDetails.FirstName @Model.UserDetails.LastName
-                                </span>
-                                <span id="checkout-email">
-                                    @Model.UserDetails.Email
-                                </span>
-                            </div>
-                        }
-
-                        @* <input asp-for='UserDetails.Email' disabled class="input-field" autocomplete="email" type="email"
-                            name="email" id="email" placeholder="Email Address"> *@
-
-                        <input asp-for='UserDetails.ContactNumber' class="input-field" autocomplete="mobile" type="text"
-                    name="phone_number" id="phone_number" placeholder="Phone Number">
-
-                        <textarea asp-for='UserDetails.Address' class="input-field" autocomplete="address-level1" type="text"
-                    name="address" id="address" placeholder="Address" cols="20" rows="5"></textarea>
-
-                        <select asp-for='UserDetails.CountryId' class="input-field" name="country" id="country"
-                    asp-items="Model.UserDetails.Countries">
-                            <option disabled selected>Country</option>
-                        </select>
-                        <select class="input-field" name="state" id="state" asp-for="UserDetails.StateId"
-                    asp-items="Model.UserDetails.States">
-                            <option disabled selected>State</option>
-                        </select>
-                        <select class="input-field" name="city" id="City" asp-for="UserDetails.CityId"
-                    asp-items="Model.UserDetails.Cities">
-                            <option disabled selected>City</option>
-                        </select>
-
-                        <div class="payment-container">
-                            <h4>Payment Method</h4>
-                            <label class="payment-method">Cash on Delivery
-                                <input type="radio" checked='checked' name="payment_method" id="cash_on_delivery"
-                            value="CashOnDelivery">
-                                <span class="radio-btn"></span>
-                            </label>
-                            <label class="payment-method">Credit Card
-                                <input type="radio" name="payment_method" id="credit_card" value="CreditCard">
-                                <span class="radio-btn"></span>
-                            </label>
-                            <label class="payment-method">Debit Card
-                                <input type="radio" name="payment_method" id="debit_card" value="DebitCard">
-                                <span class="radio-btn"></span>
-                            </label>
-                        </div>
-                    </form>
-
-                }
-                else
-                {
-                    <form asp-controller="Checkout" asp-action='CheckGuestUser' class="user-guest-email">
-                        <input class="input-field" autocomplete="email" type="email" name="email" id="email"
-                    placeholder="Email Address">
-                        <button asp-controller="Checkout" asp-action='CheckGuestUser' class="primary-button"
-                    type="submit">Continue as Guest</button>
-                    </form>
-                }
+                        </label>
+                        <label class="payment-method">Credit Card
+                            <input type="radio" name="payment_method" id="credit_card" value="CreditCard">
+                            <span class="radio-btn"></span>
+                        </label>
+                        <label class="payment-method">Debit Card
+                            <input type="radio" name="payment_method" id="debit_card" value="DebitCard">
+                            <span class="radio-btn"></span>
+                        </label>
+                    </div>
+                </form>
 
                 @await Html.PartialAsync("_LoginForm", null, new ViewDataDictionary(ViewData){{"isCheckOutForm", true}})
             }
@@ -231,8 +169,8 @@
             <button id="place-order-btn" type="submit" class="primary-button">Place
                 Order</button>
 
-            @await Html.PartialAsync("_Checkbox", null, new ViewDataDictionary(ViewData){{"LabelText",
-            "Save this information for next time"}})
+            @* @await Html.PartialAsync("_Checkbox", null, new ViewDataDictionary(ViewData){{"LabelText",
+                "Save this information for next time"}}) *@
 
         </div>
     </div>
@@ -276,13 +214,13 @@
                 tempTotal += (cartItems[i].price * cartItems[i].quantity) + calculateItemAddOnsTotalAmount(cartItems[i]);
             }
 
-            var IsGuestUser = "@ViewBag.IsGuestUser";
+            var IsGuestUser = $("#guest_user").hasClass("active");
             var checkoutDto = {
                 Products: cartItems,
                 UserDetails: {
                     FirstName: $('#first_name').val() || $("#checkout-name").text().trim().split(" ")[0],
                     LastName: $('#last_name').val() || $("#checkout-name").text().trim().split(" ")[1],
-                    Email: $("#checkout-email").text().trim(),
+                    Email: $('#email').val() || $("#checkout-email").text().trim(),
                     ContactNumber: $("#phone_number").val(),
                     Address: $("#address").val(),
                     CountryId: parseInt($("#country").val()),
@@ -291,42 +229,38 @@
                 },
                 PaymentType: $('input[name=payment_method]:checked').val(),
                 GrandTotal: tempTotal,
-                RememberInfo: $('#save_info').is(':checked'),
+    @* RememberInfo: $('#save_info').is(':checked'), *@
                 IsGuestUser: IsGuestUser === "True" ? true : false
-            };
+        };
 
-            $.ajax({
-                url: '/Checkout/PlaceOrder',
-                type: 'POST',
-                data: { checkoutDto: checkoutDto },
-                success: function (data) {
-                    if (data.success) {
-                        localStorage.removeItem("cart");
-                        window.location.href = '/Home';
-                    }
-                    else {
-                        alert("Something went wrong. Please try again.");
-                    }
-                },
-                error: function (data) {
-                    if (data.status == 500) {
-                        alert("Something went wrong. Please try again.");
-                        return;
-                    }
-                    alert(data.responseJSON[Object.keys(data.responseJSON)[0]]);
+        $.ajax({
+            url: '/Checkout/PlaceOrder',
+            type: 'POST',
+            data: { checkoutDto: checkoutDto },
+            success: function (data) {
+                localStorage.removeItem("cart");
+                window.location.href = '/';
+                alert("Order Placed Successfully");
+            },
+            error: function (data) {
+                if (data.status == 500) {
+                    alert("Something went wrong. Please try again.");
+                    return;
                 }
-            });
-        })
+                alert(data.responseJSON[Object.keys(data.responseJSON)[0]]);
+            }
+        });
+    })
 
-        $(".cart-summary-total-price").text(calculateGrandTotal());
-        var cartItems = localStorage.getItem("cart");
+    $(".cart-summary-total-price").text(calculateGrandTotal());
+    var cartItems = localStorage.getItem("cart");
 
-        if (cartItems) {
-            cartItems = JSON.parse(cartItems);
-            var cartItemsHtml = "";
+    if (cartItems) {
+        cartItems = JSON.parse(cartItems);
+        var cartItemsHtml = "";
 
-            for (var i = 0; i < cartItems.length; i++) {
-                cartItemsHtml += `<div class="cart-summary-item-container">
+        for (var i = 0; i < cartItems.length; i++) {
+            cartItemsHtml += `<div class="cart-summary-item-container">
                                     <div class="cart-summary-item-img-content">
                                         <img src="/Images/${cartItems[i].image}" alt="${cartItems[i].name}">
                                         <div class="cart-summary-item-info">
@@ -346,46 +280,36 @@
                                     </div>
                                 </div>`;
 
-            }
-            $('.cart-summary-section > :first-child').after(cartItemsHtml)
         }
+        $('.cart-summary-section > :first-child').after(cartItemsHtml)
+    }
 
-        if ($('.user-info-section').children()[0].classList.contains('logged-in')) {
+    if ($('.user-info-section').children()[0].classList.contains('logged-in')) {
+        $('.logged-in').show();
+    }
+    else {
+        if ($('#login').hasClass('active')) {
+            $('.user-details-fields').hide();
             $('.logged-in').show();
         }
         else {
-            if ($('#login').hasClass('active')) {
-                $('.user-details-fields').hide();
-                $('.logged-in').show();
-                $('.user-guest-email').hide();
-            }
-            else {
-                $('.user-details-fields').show();
-                $('.logged-in').hide();
-                $('.login-container').hide();
-                $('.user-guest-email').hide();
-            }
+            $('.user-details-fields').show();
+            $('.logged-in').hide();
+            $('.login-container').hide();
         }
-        $('.login-type-selector span').click(function () {
-            $('.login-type-selector span').removeClass('active');
-            $(this).addClass('active');
-            if ($(this).attr('id') !== 'login') {
-                $('.login-container').hide()
-                $('.user-details-fields').show();
-                $('.user-guest-email').show()
-            }
-            else {
-                $('.login-container').show()
-                $('.user-details-fields').hide();
-                $('.user-guest-email').hide()
-            }
-        });
+    }
+    $('.login-type-selector span').click(function () {
+        $('.login-type-selector span').removeClass('active');
+        $(this).addClass('active');
+        if ($(this).attr('id') !== 'login') {
+            $('.login-container').hide()
+            $('.user-details-fields').show();
+        }
+        else {
+            $('.login-container').show()
+            $('.user-details-fields').hide();
+        }
+    });
 
-    @* $('.primary-button').click(function(e){
-        if($(this).attr('id') === 'login') return
-        e.preventDefault();
-        $('.user-guest-email').hide();
-        $('.user-details-fields').show();
-        }); *@
     });
 </script>

@@ -1,6 +1,7 @@
 ﻿using KFCClone.DTOs.Auth;
 using KFCClone.DTOs.Checkout;
 using KFCClone.Interfaces;
+using KFCClone.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +11,13 @@ namespace KFCClone.Controllers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICheckoutRepository _checkoutRepository;
+        private readonly IDropDownListUtils _dropDownListUtils;
 
-        public CheckoutController(IHttpContextAccessor httpContextAccessor, ICheckoutRepository checkoutRepository)
+        public CheckoutController(IHttpContextAccessor httpContextAccessor, ICheckoutRepository checkoutRepository, IDropDownListUtils dropDownListUtils)
         {
             _httpContextAccessor = httpContextAccessor;
             _checkoutRepository = checkoutRepository;
+            _dropDownListUtils = dropDownListUtils;
         }
         
         public async Task<IActionResult> Index()
@@ -23,7 +26,10 @@ namespace KFCClone.Controllers
             if (email.Count == 0)
             {
                 CheckoutDto checkoutDto = new CheckoutDto();
+                checkoutDto.UserDetails = new CheckoutUserDetailsDto();
 
+                checkoutDto.UserDetails = _dropDownListUtils.SetDropDownListValues(checkoutDto.UserDetails);
+                
                 return View(checkoutDto);
             }
             
@@ -54,10 +60,19 @@ namespace KFCClone.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> PlaceOrder(CheckoutDto checkoutDto)
         {
-            if(!ModelState.IsValid) return BadRequest(ModelState);
-            if (checkoutDto == null) throw new ApplicationException("Request body cannot be empty");
-            
-            return Ok(await _checkoutRepository.PlaceOrderAsync(checkoutDto));
+            try
+            {
+                if(!ModelState.IsValid) return BadRequest(ModelState);
+
+                if (checkoutDto == null) throw new BadHttpRequestException("Request body cannot be empty");
+                
+                return Ok(await _checkoutRepository.PlaceOrderAsync(checkoutDto));
+            }
+            catch (System.Exception ex)
+            {
+                ModelState.AddModelError(ex.GetHashCode().ToString(), ex.Message);
+                return BadRequest(ModelState);
+            }
         }
     }
 }
