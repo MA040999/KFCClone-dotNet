@@ -69,6 +69,16 @@
             position: relative;
             font-size: 22px;
         }
+
+        .nav-item-acitve {
+            color: var(--white);
+            background-color: var(--black);
+            border-radius: 20px;
+        }
+
+        .nav-item-acitve:hover {
+            color: var(--white) !important;
+        }
     </style>
 </head>
 
@@ -137,7 +147,7 @@
                 success: function (data) {
                     $.each(data, function (key, item) {
                         $(".category-container").append(
-                            `<a href="/Category/${item.id}" class='category-item'>
+                            `<a href="/Category/${item.id}" class="category-item ${window.location.pathname.split('/').at(-1) == item.id && window.location.pathname.split('/').at(-2) == "Category" ? `nav-item-acitve` : ''}">
                                 ${item.categoryName}
                             </a>`
                         );

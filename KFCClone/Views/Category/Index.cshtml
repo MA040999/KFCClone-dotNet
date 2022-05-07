@@ -1,6 +1,24 @@
-﻿@model List<KFCClone.DTOs.Product.GetCategoryProductsResponseDto> 
+﻿@model List<KFCClone.DTOs.Product.GetCategoryProductsResponseDto>
 @{
    ViewData["Title"] = "Categories";
 }
 
-<h1>asdasdasd</h1>
+<div class="products-container">
+   @foreach (var item in Model)
+   {
+      <a asp-controller="Product" asp-action="Index" class="product-card" asp-route-productId="@item.Id">
+         <img src="/Images/@item.ProductImage" alt="@item.ProductName" />
+         <div class="product-card-content">
+            <h3>@item.ProductName</h3>
+            <p>@item.ProductDescription</p>
+            <div class="price-container">
+               <h2>PKR @item.ProductPrice</h2>
+               <div class="add-to-cart-container">
+                  <img src='/Images/shopping-bag.svg' />
+               </div>
+            </div>
+
+         </div>
+      </a>
+   }
+</div>

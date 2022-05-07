@@ -4,6 +4,7 @@ using KFCClone.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KFCClone.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220507135533_IsFriesSizeFieldInAddOnTable")]
+    partial class IsFriesSizeFieldInAddOnTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,8 +38,7 @@ namespace KFCClone.Migrations
                         .HasColumnName("is_drink");
 
                     b.Property<bool?>("IsFriesSize")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_fries_size");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsUpsize")
                         .HasColumnType("bit")

@@ -273,6 +273,7 @@
                                                 ${cartItems[i].drinks.length > 0 ? `<b>Drinks:</b> ${cartItems[i].drinks.map(addOn => `${addOn.addonName} (x${addOn.addonCount})`).join(", ")} <br>` : ''}
                                                 ${cartItems[i].addOns.length > 0 ? `<b>Add Ons:</b> ${cartItems[i].addOns.map(addOn => `${addOn.addonName} (x${addOn.addonCount})`).join(", ")}` : ''}
                                                 ${cartItems[i].upsize.length > 0 ? `<b>Upsize:</b> ${cartItems[i].upsize.map(addOn => `${addOn.addonName} (x${addOn.addonCount})`).join(", ")}` : ''}
+                                                ${cartItems[i].friesSize.length > 0 ? `<br><b>Fries Size:</b> ${cartItems[i].friesSize.map(addOn => `${addOn.addonName} (x${addOn.addonCount})`).join(", ")}` : ''}
                                             </p>
                                         </div>
 

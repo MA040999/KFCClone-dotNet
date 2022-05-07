@@ -95,7 +95,7 @@
             <h2>Add Ons</h2>
             @foreach (var item in Model.ProductAddOns)
             {
-                if (!item.AddOn.IsDrink && !item.AddOn.IsUpsize)
+                if (!item.AddOn.IsDrink && !item.AddOn.IsUpsize && item.AddOn.IsFriesSize != true)
                 {
                     <div class="addon-row" addOnId='@item.AddOnId'>
                         @await Html.PartialAsync("_Checkbox", null, new ViewDataDictionary(ViewData){{"LabelText",
@@ -104,6 +104,26 @@
                         <p class="addon-price" addOnPrice='@item.AddOn.Price'>PKR @item.AddOn.Price</p>
                         @await Html.PartialAsync("_Counter", null, new ViewDataDictionary(ViewData){{"AddOnId",
                 @item.AddOnId}})
+                    </div>
+                }
+            }
+        </div>
+        <div class="product-details-addon-container" id="addons-container">
+            <h2>Select Size</h2>
+            @foreach (var item in Model.ProductAddOns)
+            {
+                if (item.AddOn.IsFriesSize ?? false)
+                {
+                    <div class="addon-row">
+                        <label class="drink-radio-container">@item.AddOn.Name
+                            <input type="radio" id="fries-size" name="fries-size" value="@item.AddOnId"
+                        addOnName='@item.AddOn.Name'
+                        addOnPrice='@(item.AddOn.Price == 0 ? @item.Product.ProductPrice : @item.AddOn.Price)'>
+                            <span class="radio-btn"></span>
+                        </label>
+
+                        @* <p class="addon-name">@item.AddOn.Name</p> *@
+
                     </div>
                 }
             }
@@ -157,6 +177,11 @@
 
         setTotal();
 
+        if ("@Model.ProductName" === "French Fries") {
+            total = parseInt($('#fries-size').attr('addOnPrice'));
+            setTotal();
+        }
+
         $(document).on('click', ".addon-row > .checkbox-container > :checkbox", function () {
             var addonId = $(this).parents('.addon-row').attr('addOnId');
             var addonPrice = $(this).parents('.addon-row').find('.addon-price').attr('addOnPrice');
@@ -172,9 +197,15 @@
 
         })
 
+        $(document).on('change', "#fries-size", function () {
+            var count = $('.product-details-footer').find('#quantity').val();
+
+            total = parseInt($(this).attr('addOnPrice')) * parseInt(count);
+            setTotal();
+        })
+
         $(document).on('change', ".addon-row #meals", function () {
             var addonPrice = parseInt($(this).attr('addOnPrice'));
-            console.log(addonPrice);
             if (!isMealAddOnPriceIncluded) {
                 total += addonPrice;
                 previousMealAddOnPrice = addonPrice;
@@ -209,13 +240,27 @@
             var drinks = []
             var addOns = []
             var upsize = []
+            var friesSize = []
 
-            $('.addon-row :radio:checked').each(function () {
+            $('.addon-row :radio:checked:not(#fries-size)').each(function () {
                 var addonId = parseInt($(this).val());
                 var addonName = $(this).attr('addOnName');
                 var addonPrice = parseInt($(this).attr('addOnPrice'));
                 var addonCount = 1;
                 drinks.push({
+                    addonId,
+                    addonName,
+                    addonPrice,
+                    addonCount
+                });
+            })
+
+            $('.addon-row #fries-size:checked').each(function () {
+                var addonId = parseInt($(this).val());
+                var addonName = $(this).attr('addOnName');
+                var addonPrice = parseInt($(this).attr('addOnPrice'));
+                var addonCount = 1
+                friesSize.push({
                     addonId,
                     addonName,
                     addonPrice,
@@ -263,13 +308,14 @@
             cartItems.push({
                 id: @Model.Id,
                 name: "@Model.ProductName",
-                price: @Model.ProductPrice,
+                price: "@Model.ProductName" === "French Fries" ? parseInt($('.addon-row #fries-size:checked').attr('addOnPrice')) : @Model.ProductPrice,
                 image: "@Model.ProductImage",
                 index: cartItems.length,
                 quantity: parseInt($('.product-details-footer #quantity').val()),
                 drinks,
                 addOns,
-                upsize
+                upsize,
+                friesSize
             });
 
 
@@ -308,6 +354,20 @@
         })
 
         $(document).on("click", ".product-details-footer .minus", function () {
+            if ("@Model.ProductName" === "French Fries") {
+                var $input = $(this).parent().find('#quantity');
+                var count = parseInt($input.val()) - 1;
+
+                if (count < 1) {
+                    return
+                }
+
+                $input.val(count);
+                total -= total / (count + 1);
+                setTotal();
+                return
+            }
+
             var $input = $(this).parent().find('#quantity');
             var count = parseInt($input.val()) - 1;
 
@@ -321,6 +381,16 @@
         })
 
         $(document).on("click", ".product-details-footer .add", function () {
+            if ("@Model.ProductName" === "French Fries") {
+                var $input = $(this).parent().find('#quantity');
+                var count = parseInt($input.val()) + 1;
+
+                $input.val(count);
+
+                total += total / (count - 1);
+                setTotal();
+                return
+            }
             var $input = $(this).parent().find('#quantity');
             var count = parseInt($input.val()) + 1;
             $input.val(count);

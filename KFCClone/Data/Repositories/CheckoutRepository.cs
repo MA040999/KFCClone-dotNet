@@ -49,13 +49,41 @@ namespace KFCClone.Data.Repositories
 
             if (user == null)
             {
+                Country? country = await _context.Countries.FindAsync(checkoutDto.UserDetails.CountryId);
+                if (country == null)
+                    throw new BadHttpRequestException("Invalid Country");
+
+                List<State>? state = _context.States.Where(x => x.Id == checkoutDto.UserDetails.StateId && x.CountryId == country.Id).ToList();
+                if (state.Count == 0)
+                    throw new BadHttpRequestException("Invalid State");
+
+                List<City>? city = _context.Cities.Where(x => x.Id == checkoutDto.UserDetails.CityId && x.StateId == state[0].Id).ToList();
+                if (city.Count == 0)
+                    throw new BadHttpRequestException("Invalid City");
+
                 user = _mapper.Map<User>(checkoutDto.UserDetails);
                 user.IsGuestUser = true;
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
             }
+            else if (!user.IsGuestUser && checkoutDto.IsGuestUser == true)
+            {
+                throw new BadHttpRequestException("User with this email already exists");
+            }
             else
             {
+                Country? country = await _context.Countries.FindAsync(checkoutDto.UserDetails.CountryId);
+                if (country == null)
+                    throw new BadHttpRequestException("Invalid Country");
+
+                List<State>? state = _context.States.Where(x => x.Id == checkoutDto.UserDetails.StateId && x.CountryId == country.Id).ToList();
+                if (state.Count == 0)
+                    throw new BadHttpRequestException("Invalid State");
+
+                List<City>? city = _context.Cities.Where(x => x.Id == checkoutDto.UserDetails.CityId && x.StateId == state[0].Id).ToList();
+                if (city.Count == 0)
+                    throw new BadHttpRequestException("Invalid City");
+
                 user.Name = checkoutDto.UserDetails.FirstName + " " + checkoutDto.UserDetails.LastName;
                 user.ContactNumber = checkoutDto.UserDetails.ContactNumber;
                 user.Address = checkoutDto.UserDetails.Address;
@@ -107,6 +135,16 @@ namespace KFCClone.Data.Repositories
                 if (cartItemDto.Upsize != null)
                 {
                     foreach (AddOnDto addOnDto in cartItemDto.Upsize)
+                    {
+                        OrderProductAddOn orderProductAddOn = _mapper.Map<OrderProductAddOn>(addOnDto);
+                        orderProductAddOn.OrderProductId = orderProduct.Id;
+                        await _context.OrderProductAddOns.AddAsync(orderProductAddOn);
+                    }
+
+                }
+                if (cartItemDto.FriesSize != null)
+                {
+                    foreach (AddOnDto addOnDto in cartItemDto.FriesSize)
                     {
                         OrderProductAddOn orderProductAddOn = _mapper.Map<OrderProductAddOn>(addOnDto);
                         orderProductAddOn.OrderProductId = orderProduct.Id;
