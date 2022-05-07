@@ -228,39 +228,38 @@
                     CityId: parseInt($("#City").val())
                 },
                 PaymentType: $('input[name=payment_method]:checked').val(),
-                GrandTotal: tempTotal,
-    @* RememberInfo: $('#save_info').is(':checked'), *@
-                IsGuestUser: IsGuestUser === "True" ? true : false
-        };
+                OrderTotal: tempTotal,
+                IsGuestUser
+            };
 
-        $.ajax({
-            url: '/Checkout/PlaceOrder',
-            type: 'POST',
-            data: { checkoutDto: checkoutDto },
-            success: function (data) {
-                localStorage.removeItem("cart");
-                window.location.href = '/';
-                alert("Order Placed Successfully");
-            },
-            error: function (data) {
-                if (data.status == 500) {
-                    alert("Something went wrong. Please try again.");
-                    return;
+            $.ajax({
+                url: '/Checkout/PlaceOrder',
+                type: 'POST',
+                data: { checkoutDto: checkoutDto },
+                success: function (data) {
+                    localStorage.removeItem("cart");
+                    window.location.href = '/';
+                    alert("Order Placed Successfully");
+                },
+                error: function (data) {
+                    if (data.status == 500) {
+                        alert("Something went wrong. Please try again.");
+                        return;
+                    }
+                    alert(data.responseJSON[Object.keys(data.responseJSON)[0]]);
                 }
-                alert(data.responseJSON[Object.keys(data.responseJSON)[0]]);
-            }
-        });
-    })
+            });
+        })
 
-    $(".cart-summary-total-price").text(calculateGrandTotal());
-    var cartItems = localStorage.getItem("cart");
+        $(".cart-summary-total-price").text(calculateGrandTotal());
+        var cartItems = localStorage.getItem("cart");
 
-    if (cartItems) {
-        cartItems = JSON.parse(cartItems);
-        var cartItemsHtml = "";
+        if (cartItems) {
+            cartItems = JSON.parse(cartItems);
+            var cartItemsHtml = "";
 
-        for (var i = 0; i < cartItems.length; i++) {
-            cartItemsHtml += `<div class="cart-summary-item-container">
+            for (var i = 0; i < cartItems.length; i++) {
+                cartItemsHtml += `<div class="cart-summary-item-container">
                                     <div class="cart-summary-item-img-content">
                                         <img src="/Images/${cartItems[i].image}" alt="${cartItems[i].name}">
                                         <div class="cart-summary-item-info">
@@ -280,36 +279,36 @@
                                     </div>
                                 </div>`;
 
+            }
+            $('.cart-summary-section > :first-child').after(cartItemsHtml)
         }
-        $('.cart-summary-section > :first-child').after(cartItemsHtml)
-    }
 
-    if ($('.user-info-section').children()[0].classList.contains('logged-in')) {
-        $('.logged-in').show();
-    }
-    else {
-        if ($('#login').hasClass('active')) {
-            $('.user-details-fields').hide();
+        if ($('.user-info-section').children()[0].classList.contains('logged-in')) {
             $('.logged-in').show();
         }
         else {
-            $('.user-details-fields').show();
-            $('.logged-in').hide();
-            $('.login-container').hide();
+            if ($('#login').hasClass('active')) {
+                $('.user-details-fields').hide();
+                $('.logged-in').show();
+            }
+            else {
+                $('.user-details-fields').show();
+                $('.logged-in').hide();
+                $('.login-container').hide();
+            }
         }
-    }
-    $('.login-type-selector span').click(function () {
-        $('.login-type-selector span').removeClass('active');
-        $(this).addClass('active');
-        if ($(this).attr('id') !== 'login') {
-            $('.login-container').hide()
-            $('.user-details-fields').show();
-        }
-        else {
-            $('.login-container').show()
-            $('.user-details-fields').hide();
-        }
-    });
+        $('.login-type-selector span').click(function () {
+            $('.login-type-selector span').removeClass('active');
+            $(this).addClass('active');
+            if ($(this).attr('id') !== 'login') {
+                $('.login-container').hide()
+                $('.user-details-fields').show();
+            }
+            else {
+                $('.login-container').show()
+                $('.user-details-fields').hide();
+            }
+        });
 
     });
 </script>

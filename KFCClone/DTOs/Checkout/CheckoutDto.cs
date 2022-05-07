@@ -11,7 +11,7 @@ namespace KFCClone.DTOs.Checkout
         [EnumDataType(typeof(PaymentType))]
         public PaymentType PaymentType { get; set; }
         public List<CartItemDto> Products { get; set; } = null!;
-        public int GrandTotal { get; set; }
+        public int OrderTotal { get; set; }
 
         public CheckoutUserDetailsDto UserDetails { get; set; } = null!;
 

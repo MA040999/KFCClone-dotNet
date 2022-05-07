@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using KFCClone.DTOs.AddOn;
 using KFCClone.DTOs.Auth;
+using KFCClone.DTOs.Cart;
 using KFCClone.DTOs.Checkout;
 using KFCClone.Interfaces;
 using KFCClone.Models;
@@ -44,7 +46,6 @@ namespace KFCClone.Data.Repositories
         public async Task<CheckoutDto?> PlaceOrderAsync(CheckoutDto checkoutDto)
         {
             User? user = await _context.Users.FirstOrDefaultAsync(x => x.Email == checkoutDto.UserDetails.Email);
-            if (user != null && checkoutDto.IsGuestUser == true) throw new BadHttpRequestException("User with this email already exists");
 
             if (user == null)
             {
@@ -53,8 +54,69 @@ namespace KFCClone.Data.Repositories
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
             }
+            else
+            {
+                user.Name = checkoutDto.UserDetails.FirstName + " " + checkoutDto.UserDetails.LastName;
+                user.ContactNumber = checkoutDto.UserDetails.ContactNumber;
+                user.Address = checkoutDto.UserDetails.Address;
+                user.CityId = checkoutDto.UserDetails.CityId;
+                user.StateId = checkoutDto.UserDetails.StateId;
+                user.CountryId = checkoutDto.UserDetails.CountryId;
+                user.IsGuestUser = checkoutDto.IsGuestUser ?? false;
+
+                _context.Entry(user).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+
+            Order order = _mapper.Map<Order>(checkoutDto);
+            order.UserId = user.Id;
+
+            _context.Orders.Add(order);
+
+            await _context.SaveChangesAsync();
+
+            foreach (CartItemDto cartItemDto in checkoutDto.Products)
+            {
+                OrderProduct orderProduct = _mapper.Map<OrderProduct>(cartItemDto);
+                orderProduct.OrderId = order.Id;
+                await _context.OrderProducts.AddAsync(orderProduct);
+
+                await _context.SaveChangesAsync();
 
 
+                if (cartItemDto.Drinks != null)
+                {
+                    foreach (AddOnDto addOnDto in cartItemDto.Drinks)
+                    {
+                        OrderProductAddOn orderProductAddOn = _mapper.Map<OrderProductAddOn>(addOnDto);
+                        orderProductAddOn.OrderProductId = orderProduct.Id;
+                        await _context.OrderProductAddOns.AddAsync(orderProductAddOn);
+                    }
+
+                }
+                if (cartItemDto.AddOns != null)
+                {
+                    foreach (AddOnDto addOnDto in cartItemDto.AddOns)
+                    {
+                        OrderProductAddOn orderProductAddOn = _mapper.Map<OrderProductAddOn>(addOnDto);
+                        orderProductAddOn.OrderProductId = orderProduct.Id;
+                        await _context.OrderProductAddOns.AddAsync(orderProductAddOn);
+                    }
+
+                }
+                if (cartItemDto.Upsize != null)
+                {
+                    foreach (AddOnDto addOnDto in cartItemDto.Upsize)
+                    {
+                        OrderProductAddOn orderProductAddOn = _mapper.Map<OrderProductAddOn>(addOnDto);
+                        orderProductAddOn.OrderProductId = orderProduct.Id;
+                        await _context.OrderProductAddOns.AddAsync(orderProductAddOn);
+                    }
+
+                }
+            }
+
+            await _context.SaveChangesAsync();
 
             return checkoutDto;
 

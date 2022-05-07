@@ -19,7 +19,7 @@ namespace KFCClone.Controllers
             _checkoutRepository = checkoutRepository;
             _dropDownListUtils = dropDownListUtils;
         }
-        
+
         public async Task<IActionResult> Index()
         {
             var email = _httpContextAccessor.HttpContext!.User.Claims.Where(x => x.Type.Contains("emailaddress")).ToList();
@@ -29,12 +29,12 @@ namespace KFCClone.Controllers
                 checkoutDto.UserDetails = new CheckoutUserDetailsDto();
 
                 checkoutDto.UserDetails = _dropDownListUtils.SetDropDownListValues(checkoutDto.UserDetails);
-                
+
                 return View(checkoutDto);
             }
-            
+
             CheckoutDto checkoutDetails = await _checkoutRepository.GetUserDetailsAsync(email[0].Value);
-            
+
             return View(checkoutDetails);
         }
 
@@ -47,8 +47,8 @@ namespace KFCClone.Controllers
 
             // return Ok(await _auth.CheckGuestUserAsync(requestBodyDto.Email));
 
-            if(String.IsNullOrEmpty(requestBodyDto.Email)) return View("Index");
-            
+            if (String.IsNullOrEmpty(requestBodyDto.Email)) return View("Index");
+
             CheckoutDto checkoutDetails = await _checkoutRepository.GetUserDetailsAsync(requestBodyDto.Email);
 
             ViewBag.IsGuestUser = true;
@@ -62,16 +62,20 @@ namespace KFCClone.Controllers
         {
             try
             {
-                if(!ModelState.IsValid) return BadRequest(ModelState);
+                if (!ModelState.IsValid) return BadRequest(ModelState);
 
                 if (checkoutDto == null) throw new BadHttpRequestException("Request body cannot be empty");
-                
+
                 return Ok(await _checkoutRepository.PlaceOrderAsync(checkoutDto));
             }
             catch (System.Exception ex)
             {
-                ModelState.AddModelError(ex.GetHashCode().ToString(), ex.Message);
-                return BadRequest(ModelState);
+                if (ex.GetType() == typeof(BadHttpRequestException))
+                {
+                    ModelState.AddModelError(ex.GetHashCode().ToString(), ex.Message);
+                    return BadRequest(ModelState);
+                }
+                return StatusCode(500);
             }
         }
     }

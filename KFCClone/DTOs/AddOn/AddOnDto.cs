@@ -5,7 +5,7 @@ namespace KFCClone.DTOs.AddOn
         public int AddOnId { get; set; }
         public string AddOnName { get; set; } = null!;
         public int AddOnPrice { get; set; }
-        
-        public int addonCount { get; set; }
+
+        public int AddOnCount { get; set; }
     }
 }
