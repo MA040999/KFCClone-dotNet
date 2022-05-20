@@ -17,5 +17,11 @@ namespace KFCClone.Data.Repositories
             List<Product> products = await _context.Products.Where(x => x.IsHomePageProduct == true).Include(x => x.Category).ToListAsync();
             return products;
         }
+
+        public async Task<List<Promotion>> GetPromotions()
+        {
+            List<Promotion> promotions = await _context.Promotions.ToListAsync();
+            return promotions;
+        }
     }
 }

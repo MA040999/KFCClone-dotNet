@@ -16,6 +16,8 @@
 
 .carousel-container .carousel-inner {
   border-radius: 25px;
+  background-color: var(--dark-grey);
+  aspect-ratio: 16 / 5.5;
 }
 .carousel-container .carousel-indicators {
   bottom: -40px;

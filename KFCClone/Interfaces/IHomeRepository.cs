@@ -6,5 +6,6 @@ namespace KFCClone
     public interface IHomeRepository
     {
         Task<List<Product>> GetHomePageProductsAsync();
+        Task<List<Promotion>> GetPromotions();
     }
 }

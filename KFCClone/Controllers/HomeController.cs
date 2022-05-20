@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using KFCClone.Models;
+using KFCClone.ViewModel;
 
 namespace KFCClone.Controllers
 {
@@ -15,11 +16,18 @@ namespace KFCClone.Controllers
             _homeRepository = homeRepository;
         }
 
-        [Route("")]
         public async Task<IActionResult> Index()
         {
-            
-            return View(await _homeRepository.GetHomePageProductsAsync());
+            List<Product> products = await _homeRepository.GetHomePageProductsAsync();
+            List<Promotion> promotions = await _homeRepository.GetPromotions();
+
+            HomeViewModel homeViewModel = new HomeViewModel
+            {
+                products = products,
+                promotions = promotions
+            };
+
+            return View(homeViewModel);
         }
 
         public IActionResult Privacy()

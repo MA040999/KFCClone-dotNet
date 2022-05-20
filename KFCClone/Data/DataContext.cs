@@ -211,9 +211,9 @@ namespace KFCClone.Data
 
                 entity.Property(e => e.PreviousId).HasColumnName("previous_id");
 
-                entity.Property(e => e.Url)
-                    .HasMaxLength(90)
-                    .HasColumnName("url");
+                // entity.Property(e => e.Url)
+                //     .HasMaxLength(90)
+                //     .HasColumnName("url");
             });
 
             modelBuilder.Entity<State>(entity =>

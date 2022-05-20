@@ -1,4 +1,4 @@
-﻿@model List<KFCClone.Models.Product>
+﻿@model KFCClone.ViewModel.HomeViewModel
 @{
     ViewData["Title"] = "Home";
 }
@@ -31,20 +31,30 @@
     <div class="carousel-container">
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
-                    aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                    aria-label="Slide 2"></button>
-
+                @foreach (var item in Model.promotions)
+                {
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@(item.Id - 1)"
+                    class="@(Model.promotions[0].Id == item.Id ? " active" : "")" aria-current="true"
+                    aria-label="Slide @item.Id"></button>
+                }
             </div>
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="/Images/promotion-image-1.png" class="d-block w-100" alt="promotion-image-1">
-                </div>
-                <div class="carousel-item">
-                    <img src="/Images/promotion-image-2.png" class="d-block w-100" alt="promotion-image-2">
-                </div>
-
+                @foreach (var item in Model.promotions)
+                {
+                    @if (item.ProductId.HasValue)
+                    {
+                        <a asp-controller="Product" asp-action="Index" asp-route-productId="@item.ProductId"
+                    class="carousel-item @(Model.promotions[0].Id == item.Id ? " active" : "") ">
+                            <img src=" /Images/@item.Image" class="carousel-image" alt="promotion-image-@item.Id">
+                        </a>
+                    }
+                    else
+                    {
+                        <div class="carousel-item @(Model.promotions[0].Id == item.Id ? " active" : "") ">
+                            <img src=" /Images/@item.Image" class="carousel-image" alt="promotion-image-@item.Id">
+                        </div>
+                    }
+                }
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
                 data-bs-slide="prev">
@@ -60,10 +70,10 @@
     </div>
 
     <h4 class="heading-container">
-        @Model[0].Category.CategoryName
+        @Model.products[0].Category.CategoryName
     </h4>
     <div class="products-container">
-        @foreach (var item in Model)
+        @foreach (var item in Model.products)
         {
             <a asp-controller="Product" asp-action="Index" class="product-card" asp-route-productId="@item.Id">
                 <img src="/Images/@item.ProductImage" alt="@item.ProductName" />
